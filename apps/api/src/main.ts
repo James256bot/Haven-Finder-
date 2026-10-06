@@ -28,6 +28,7 @@ import marketingRoute from './routes/marketing';
 import adminRoute from './routes/admin';
 import migrateOnce from './routes/migrate-once';
 import adminBootstrap from './routes/admin-bootstrap';
+import seedOnce from './routes/seed-once';
 
 async function main() {
   const app = Fastify({
@@ -74,6 +75,7 @@ async function main() {
   await app.register(adminRoute);
   await app.register(migrateOnce);
   await app.register(adminBootstrap);
+  await app.register(seedOnce);
 
   await app.listen({ port: config.port, host: '0.0.0.0' });
   app.log.info(`HavenFinder API listening on http://localhost:${config.port}`);

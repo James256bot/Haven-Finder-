@@ -3,3 +3,12 @@ dist/
 .env
 *.log
 apps/api/uploads/
+.env
+.env.*
+!.env.example
+cookies.txt
+*.bak
+apps/api/uploads/
+node_modules/
+.DS_Store
+*.log

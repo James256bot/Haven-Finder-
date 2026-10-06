@@ -44,7 +44,7 @@ async function main() {
   await app.register(xmlParserPlugin);
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(cors, {
-    origin: config.env === 'production' ? ['https://havenfinder.com'] : true,
+    origin: true,
     credentials: true,
   });
   await app.register(rateLimit, { max: 100, timeWindow: '1 minute' });

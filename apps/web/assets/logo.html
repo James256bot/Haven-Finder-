@@ -1,0 +1,54 @@
+<!-- HavenFinder Logo Component -->
+<!-- Usage: Include this in any HTML page -->
+
+<style>
+    .hf-logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-weight: 800;
+        font-size: 1.4rem;
+    }
+    .hf-logo-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    .hf-logo-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    .hf-logo-text {
+        color: #1e293b;
+    }
+    .hf-logo-text .highlight {
+        color: #3b82f6;
+    }
+    .hf-logo-subtitle {
+        display: block;
+        font-size: 0.6rem;
+        font-weight: 500;
+        color: #64748b;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<div class="hf-logo">
+    <div class="hf-logo-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+            <polygon points="32,8 8,28 56,28" fill="#ffffff"/>
+            <rect x="14" y="26" width="36" height="24" rx="4" fill="#ffffff" opacity="0.9"/>
+            <rect x="27" y="36" width="10" height="14" rx="4" fill="#3b82f6"/>
+        </svg>
+    </div>
+    <div>
+        <span class="hf-logo-text">Haven<span class="highlight">Finder</span></span>
+        <span class="hf-logo-subtitle">Find Your Perfect Home</span>
+    </div>
+</div>

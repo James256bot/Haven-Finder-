@@ -1,0 +1,48 @@
+import Fastify from 'fastify';
+import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
+import cookie from '@fastify/cookie';
+import { config } from './config';
+import errorsPlugin from './plugins/errors';
+import authPlugin from './plugins/auth';
+import healthRoute from './routes/health';
+import authRoute from './routes/auth';
+import listingsRoute from './routes/listings';
+import mapRoute from './routes/map';
+import locationsRoute from './routes/locations';
+
+async function main() {
+  const app = Fastify({
+    logger: {
+      level: config.env === 'production' ? 'info' : 'debug',
+      transport: config.env === 'production' ? undefined : { target: 'pino-pretty' },
+    },
+    trustProxy: true,
+    requestIdHeader: 'x-request-id',
+  });
+
+  await app.register(errorsPlugin);
+  await app.register(helmet, { contentSecurityPolicy: false });
+  await app.register(cors, {
+    origin: config.env === 'production' ? ['https://havenfinder.com'] : true,
+    credentials: true,
+  });
+  await app.register(rateLimit, { max: 100, timeWindow: '1 minute' });
+  await app.register(cookie);
+
+  await app.register(authPlugin);
+  await app.register(healthRoute);
+  await app.register(authRoute);
+  await app.register(mapRoute);
+  await app.register(listingsRoute);
+  await app.register(locationsRoute);
+
+  await app.listen({ port: config.port, host: '0.0.0.0' });
+  app.log.info(`HavenFinder API listening on http://localhost:${config.port}`);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

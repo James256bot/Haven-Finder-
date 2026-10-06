@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60" width="300" height="60">
+  <defs>
+    <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon -->
+  <rect x="2" y="2" width="56" height="56" rx="14" fill="url(#bgG)"/>
+  <polygon points="30,10 10,26 50,26" fill="#ffffff"/>
+  <rect x="15" y="24" width="30" height="20" rx="3" fill="#ffffff" opacity="0.9"/>
+  <rect x="26" y="32" width="8" height="13" rx="3" fill="#3b82f6"/>
+  
+  <!-- Text -->
+  <text x="70" y="38" font-family="Inter, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#1e293b">
+    Haven<tspan fill="#3b82f6">Finder</tspan>
+  </text>
+</svg>

@@ -1,0 +1,53 @@
+/* HavenFinder Logo CSS Component */
+.hf-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.hf-logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #1e40af, #7c3aed);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(30,64,175,0.3);
+}
+
+.hf-logo-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.hf-logo-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    color: #0f172a;
+}
+
+.hf-logo-text .finder {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hf-logo-tagline {
+    display: block;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+/* Dark version */
+.hf-logo-dark .hf-logo-text {
+    color: #ffffff;
+}

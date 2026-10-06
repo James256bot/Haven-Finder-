@@ -1,0 +1,9 @@
+{
+  "name": "@havenfinder/config",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "zod": "^3.23.0",
+    "dotenv": "^16.4.0"
+  }
+}

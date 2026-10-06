@@ -1,0 +1,56 @@
+import { create } from 'zustand';
+
+type FavState = {
+  ids: Set<string>;
+  loaded: boolean;
+  load: () => Promise<void>;
+  toggle: (listingId: string) => Promise<void>;
+  isFav: (listingId: string) => boolean;
+};
+
+export const useFavorites = create<FavState>((set, get) => ({
+  ids: new Set(),
+  loaded: false,
+
+  load: async () => {
+    const tk = localStorage.getItem('hf_token');
+    if (!tk) { set({ ids: new Set(), loaded: true }); return; }
+    try {
+      const res = await fetch('/api/me/favorites/ids', {
+        headers: { Authorization: `Bearer ${tk}` },
+      });
+      const j = await res.json();
+      if (j.success) set({ ids: new Set(j.data.ids), loaded: true });
+    } catch { set({ loaded: true }); }
+  },
+
+  toggle: async (listingId: string) => {
+    const tk = localStorage.getItem('hf_token');
+    if (!tk) {
+      window.location.href = '/login';
+      return;
+    }
+    const current = new Set(get().ids);
+    const wasFav = current.has(listingId);
+
+    // Optimistic update
+    if (wasFav) current.delete(listingId);
+    else current.add(listingId);
+    set({ ids: current });
+
+    try {
+      await fetch(`/api/listings/${listingId}/favorite`, {
+        method: wasFav ? 'DELETE' : 'POST',
+        headers: { Authorization: `Bearer ${tk}` },
+      });
+    } catch {
+      // Revert on failure
+      const revert = new Set(get().ids);
+      if (wasFav) revert.add(listingId);
+      else revert.delete(listingId);
+      set({ ids: revert });
+    }
+  },
+
+  isFav: (listingId: string) => get().ids.has(listingId),
+}));

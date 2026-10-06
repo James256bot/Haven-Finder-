@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <defs>
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon Background - Rounded Square -->
+  <rect x="2" y="10" width="80" height="80" rx="20" fill="url(#iconBg)"/>
+  
+  <!-- Subtle inner shadow effect -->
+  <rect x="2" y="10" width="80" height="80" rx="20" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+  
+  <!-- House Icon -->
+  <!-- Roof -->
+  <polygon points="42,22 12,52 72,52" fill="#ffffff"/>
+  
+  <!-- House Body -->
+  <rect x="18" y="50" width="48" height="32" rx="4" fill="#ffffff" opacity="0.95"/>
+  
+  <!-- Door -->
+  <rect x="36" y="62" width="12" height="20" rx="6" fill="#3b82f6"/>
+  
+  <!-- Door Handle -->
+  <circle cx="44" cy="74" r="1.5" fill="#ffffff"/>
+  
+  <!-- Left Window -->
+  <rect x="23" y="57" width="9" height="8" rx="2" fill="#3b82f6"/>
+  
+  <!-- Right Window -->
+  <rect x="52" y="57" width="9" height="8" rx="2" fill="#3b82f6"/>
+  
+  <!-- Heart Accent -->
+  <path d="M42,16 C39,13 33,16 33,21 C33,26 39,30 42,32 C45,30 51,26 51,21 C51,16 45,13 42,16 Z" fill="#fbbf24"/>
+  
+  <!-- Text: Haven -->
+  <text x="95" y="55" font-family="'Inter','Segoe UI',sans-serif" font-size="36" font-weight="800" fill="url(#textGradient)" letter-spacing="-0.5">Haven</text>
+  
+  <!-- Text: Finder (with gradient) -->
+  <defs>
+    <linearGradient id="finderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <text x="195" y="55" font-family="'Inter','Segoe UI',sans-serif" font-size="36" font-weight="800" fill="url(#finderGradient)" letter-spacing="-0.5">Finder</text>
+  
+  <!-- Tagline -->
+  <text x="95" y="75" font-family="'Inter','Segoe UI',sans-serif" font-size="12" font-weight="500" fill="#64748b" letter-spacing="1">FIND YOUR PERFECT HOME</text>
+</svg>

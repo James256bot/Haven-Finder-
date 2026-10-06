@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HavenFinder — Find Your Haven</title>
+  <meta name="description" content="Discover trusted homes, stays, spaces and properties across Uganda and beyond." />
+</head>
+<body class="bg-slate-50">
+  <div id="root"></div>
+  <pre id="fatal" style="color:red;padding:16px;font-family:monospace;font-size:12px;white-space:pre-wrap;"></pre>
+  <script>
+    window.addEventListener('error', function(e) {
+      document.getElementById('fatal').textContent = 'ERROR: ' + (e.message || '') + '\n' + (e.filename || '') + ':' + (e.lineno || '');
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      document.getElementById('fatal').textContent = 'PROMISE: ' + (e.reason?.message || e.reason);
+    });
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "havenfinder",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "drizzle-orm": "0.36.4",
+    "drizzle-kit": "0.28.1"
+  },
+  "scripts": {
+    "db:generate": "npm -w @havenfinder/db run generate",
+    "db:migrate": "npm -w @havenfinder/db run migrate",
+    "db:seed": "npm -w @havenfinder/db run seed",
+    "db:studio": "npm -w @havenfinder/db run studio",
+    "api:dev": "npm -w @havenfinder/api run dev",
+    "web:dev": "npm -w @havenfinder/web run dev"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.19.12": true,
+    "esbuild@0.28.2": true,
+    "esbuild@0.21.5": true
+  }
+}

@@ -1,6 +1,9 @@
-import type { ApiResponse, Listing } from '../types';
+import type { ApiResponse, Listing, MapPin } from '../types';
 
-const BASE = '/api';
+// In dev: Vite proxy forwards /api → localhost:3001 and strips /api.
+// In prod: VITE_API_URL points at Railway, which has no /api prefix.
+const VITE_API = (import.meta as any).env?.VITE_API_URL as string | undefined;
+const BASE = VITE_API ? VITE_API : '/api';
 
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(BASE + path);
@@ -19,6 +22,7 @@ export type ListingQuery = {
   listingType?: string;
   propertyType?: string;
   bedrooms?: string | number;
+  bathrooms?: string | number;
   minPrice?: string | number;
   maxPrice?: string | number;
   verification?: string;
@@ -38,6 +42,10 @@ export const api = {
   listings: (params: ListingQuery = {}) =>
     get<{ listings: Listing[]; total: number; limit: number; offset: number }>(
       `/listings?${qs(params)}`,
+    ),
+  mapPins: (params: ListingQuery = {}) =>
+    get<{ pins: MapPin[]; capped: boolean }>(
+      `/listings/map?${qs(params)}`,
     ),
   listing: (slug: string) =>
     get<{ listing: Listing }>(`/listings/${slug}`),

@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS listings (
   inquiry_count integer DEFAULT 0, listing_type varchar(32),
   country_code char(2), location_id uuid,
   price_period varchar(16), price_amount numeric(18,2),
-  price_usd_cents numeric(18,2), address_line text,
+  price_usd numeric(18,2), address_line text,
   floor_area_sqm numeric(10,2), land_area_sqm numeric(12,2),
   furnishing varchar(16), availability varchar(16),
   verification varchar(16) DEFAULT 'unverified',

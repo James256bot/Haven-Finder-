@@ -108,7 +108,7 @@ async function saveListing(l: any, ownerId: string) {
        bedrooms, bathrooms, square_feet, property_type,
        main_image_url, published_at,
        listing_type, country_code,
-       price_period, price_amount, price_usd_cents,
+       price_period, price_amount, price_usd,
        floor_area_sqm, address_line,
        verification, is_seed,
        source_code, source_listing_id, source_url, last_synced_at, raw_data
@@ -131,7 +131,7 @@ async function saveListing(l: any, ownerId: string) {
        floor_area_sqm  = COALESCE(EXCLUDED.floor_area_sqm, listings.floor_area_sqm),
        address_line    = COALESCE(EXCLUDED.address_line, listings.address_line),
        price_amount    = EXCLUDED.price_amount,
-       price_usd_cents = EXCLUDED.price_usd_cents,
+       price_usd = EXCLUDED.price_usd,
        last_synced_at  = now(),
        raw_data        = EXCLUDED.raw_data
      RETURNING id`,

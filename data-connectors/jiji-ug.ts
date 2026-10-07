@@ -156,7 +156,7 @@ async function saveListing(item: any, ownerId: string) {
        bedrooms, bathrooms, property_type,
        main_image_url, published_at,
        listing_type, country_code,
-       price_period, price_amount, price_usd_cents,
+       price_period, price_amount, price_usd,
        floor_area_sqm, furnishing, address_line,
        verification, is_seed, is_featured,
        source_code, source_listing_id, source_url, last_synced_at, raw_data
@@ -174,7 +174,7 @@ async function saveListing(item: any, ownerId: string) {
      )
      ON CONFLICT (source_code, source_listing_id) DO UPDATE SET
        price_amount    = EXCLUDED.price_amount,
-       price_usd_cents = EXCLUDED.price_usd_cents,
+       price_usd = EXCLUDED.price_usd,
        main_image_url  = EXCLUDED.main_image_url,
        last_synced_at  = now(),
        raw_data        = EXCLUDED.raw_data

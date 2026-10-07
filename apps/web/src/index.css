@@ -2,5 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
-html { -webkit-text-size-adjust: 100%; }
-body { font-feature-settings: 'cv11', 'ss01'; }
+@layer base {
+  html {
+    font-size: 17px;   /* was 16px — +6% base */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    color: #0f172a;
+    background: #f8fafc;
+  }
+  h1, h2, h3 {
+    font-family: 'Sora', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+  *:focus-visible {
+    outline: 2px solid #0a5cff;
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+}
+
+@layer components {
+  .container-page { @apply max-w-7xl mx-auto px-5 sm:px-7 lg:px-10; }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-2xl border border-ink-200/70;
+    box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.03), 0 4px 12px -2px rgb(15 23 42 / 0.06);
+    transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .card-hover:hover {
+    box-shadow: 0 4px 12px -2px rgb(15 23 42 / 0.08), 0 12px 32px -8px rgb(15 23 42 / 0.12);
+    transform: translateY(-3px);
+    border-color: theme('colors.brand.200');
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-sm { @apply px-4 py-2.5 text-sm; }
+  .btn-md { @apply px-6 py-3 text-base; }
+  .btn-lg { @apply px-7 py-4 text-lg; }
+
+  .btn-primary {
+    @apply bg-brand-600 text-white;
+    box-shadow: 0 1px 2px rgb(10 92 255 / 0.1), 0 4px 14px -2px rgb(10 92 255 / 0.30);
+  }
+  .btn-primary:hover { @apply bg-brand-700; box-shadow: 0 2px 4px rgb(10 92 255 / 0.15), 0 6px 20px -2px rgb(10 92 255 / 0.40); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn-secondary {
+    @apply bg-white text-ink-900 border border-ink-300 hover:bg-ink-50 hover:border-ink-400;
+  }
+  .btn-ghost {
+    @apply text-ink-700 hover:bg-ink-100;
+  }
+
+  /* Typography */
+  .h-display {
+    font-family: 'Sora', 'Inter', system-ui, sans-serif;
+    @apply text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight leading-[1.08];
+  }
+  .h1 { font-family: 'Sora', 'Inter', sans-serif; @apply text-3xl sm:text-4xl font-bold tracking-tight leading-tight; }
+  .h2 { font-family: 'Sora', 'Inter', sans-serif; @apply text-2xl sm:text-3xl font-bold tracking-tight leading-tight; }
+  .h3 { font-family: 'Sora', 'Inter', sans-serif; @apply text-lg sm:text-xl font-bold tracking-tight; }
+
+  /* Inputs */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border border-ink-300 bg-white;
+    @apply focus:border-brand-500 focus:ring-4 focus:ring-brand-100 outline-none;
+    @apply text-ink-900 placeholder:text-ink-400 transition-all duration-200;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider;
+  }
+  .badge-verified    { @apply bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/70; }
+  .badge-sourced     { @apply bg-sky-50 text-sky-700 ring-1 ring-sky-200/70; }
+  .badge-classified  { @apply bg-amber-50 text-amber-700 ring-1 ring-amber-200/70; }
+  .badge-unverified  { @apply bg-ink-100 text-ink-600 ring-1 ring-ink-200; }
+
+  /* Section headers */
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-widest text-brand-600;
+  }
+}

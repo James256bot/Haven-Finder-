@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none">
+  <!-- Icon: pin + roof -->
+  <defs>
+    <linearGradient id="hf-grad" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2e5aff"/>
+      <stop offset="1" stop-color="#0646cc"/>
+    </linearGradient>
+    <linearGradient id="hf-roof" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="1" stop-color="#d9e4ff" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square background -->
+  <rect x="0" y="4" width="56" height="56" rx="16" fill="url(#hf-grad)"/>
+
+  <!-- Pin + roof shape -->
+  <path d="M28 14 C20.3 14 14 20.1 14 27.6 C14 37.4 28 50 28 50 C28 50 42 37.4 42 27.6 C42 20.1 35.7 14 28 14 Z"
+        fill="url(#hf-roof)" opacity="0.18"/>
+  <path d="M22 32 L28 26 L34 32 L34 40 L31 40 L31 35 L25 35 L25 40 L22 40 Z"
+        fill="url(#hf-roof)"/>
+
+  <!-- Wordmark -->
+  <text x="74" y="41" font-family="Sora, Inter, system-ui, sans-serif" font-size="28" font-weight="800" letter-spacing="-1" fill="#0f172a">
+    Haven<tspan fill="#0a5cff">Finder</tspan>
+  </text>
+</svg>

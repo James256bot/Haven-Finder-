@@ -321,7 +321,7 @@ async function seedListings(c: any, locationIds: Record<string, string>, userIds
            bedrooms, bathrooms, square_feet, property_type,
            main_image_url, published_at,
            listing_type, country_code, location_id,
-           price_period, price_amount, price_usd_cents,
+           price_period, price_amount, price_usd,
            floor_area_sqm, furnishing, availability, verification,
            is_seed, is_featured
          ) VALUES (

@@ -4,7 +4,7 @@ type FavState = {
   ids: Set<string>;
   loaded: boolean;
   load: () => Promise<void>;
-  toggle: (listingId: string) => Promise<void>;
+  toggle: (listingId: string) => Promise<{ favorited: boolean; ok: boolean }>;
   isFav: (listingId: string) => boolean;
 };
 
@@ -28,27 +28,28 @@ export const useFavorites = create<FavState>((set, get) => ({
     const tk = localStorage.getItem('hf_token');
     if (!tk) {
       window.location.href = '/login';
-      return;
+      return { favorited: false, ok: false };
     }
     const current = new Set(get().ids);
     const wasFav = current.has(listingId);
 
-    // Optimistic update
     if (wasFav) current.delete(listingId);
     else current.add(listingId);
     set({ ids: current });
 
     try {
-      await fetch(`/api/listings/${listingId}/favorite`, {
+      const res = await fetch(`/api/listings/${listingId}/favorite`, {
         method: wasFav ? 'DELETE' : 'POST',
         headers: { Authorization: `Bearer ${tk}` },
       });
+      if (!res.ok) throw new Error('Failed');
+      return { favorited: !wasFav, ok: true };
     } catch {
-      // Revert on failure
       const revert = new Set(get().ids);
       if (wasFav) revert.add(listingId);
       else revert.delete(listingId);
       set({ ids: revert });
+      return { favorited: wasFav, ok: false };
     }
   },
 

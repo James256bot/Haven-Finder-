@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a5cff" />
+  <meta name="description" content="Discover trusted homes, stays, and properties across Uganda and beyond." />
   <title>HavenFinder — Find Your Haven</title>
-  <meta name="description" content="Discover trusted homes, stays, spaces and properties across Uganda and beyond." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/logo-primary.png" />
+  <link rel="apple-touch-icon" href="/logo/havenfinder-icon.svg" />
+  <meta property="og:image" content="https://havenfinder-ug.netlify.app/logo/havenfinder-logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body class="bg-slate-50">
   <div id="root"></div>
-  <pre id="fatal" style="color:red;padding:16px;font-family:monospace;font-size:12px;white-space:pre-wrap;"></pre>
-  <script>
-    window.addEventListener('error', function(e) {
-      document.getElementById('fatal').textContent = 'ERROR: ' + (e.message || '') + '\n' + (e.filename || '') + ':' + (e.lineno || '');
-    });
-    window.addEventListener('unhandledrejection', function(e) {
-      document.getElementById('fatal').textContent = 'PROMISE: ' + (e.reason?.message || e.reason);
-    });
-  </script>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

@@ -43,7 +43,7 @@ const route: FastifyPluginAsync = async (app) => {
              user_id, title, slug, description, type, status,
              price, currency, city, country, latitude, longitude,
              bedrooms, bathrooms, property_type, main_image_url, published_at,
-             listing_type, country_code, price_period, price_amount, price_usd_cents,
+             listing_type, country_code, price_period, price_amount, price_usd,
              verification, is_seed, source_code
            ) VALUES ($1,$2,$3,$4,'property','published',$5,'UGX','Kampala','Uganda',$6,$7,$8,$9,$10,$11,now(),$12,'UG','monthly',$5,$13,'unverified',true,'demo')
            ON CONFLICT (slug) DO NOTHING`,

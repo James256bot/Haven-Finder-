@@ -48,7 +48,7 @@ export const properties = pgTable('listings', {
   locationId: uuid('location_id'),
   pricePeriod: varchar('price_period', { length: 16 }),        // nightly | monthly | yearly | total
   priceAmount: numeric('price_amount', { precision: 18, scale: 2 }),
-  priceUsdCents: numeric('price_usd_cents', { precision: 18, scale: 2 }),
+  priceUsdCents: numeric('price_usd', { precision: 18, scale: 2 }),
   addressLine: text('address_line'),
   floorAreaSqm: numeric('floor_area_sqm', { precision: 10, scale: 2 }),
   landAreaSqm: numeric('land_area_sqm', { precision: 12, scale: 2 }),

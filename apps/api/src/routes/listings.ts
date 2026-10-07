@@ -1,12 +1,13 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { pool } from '../lib/db';
+import { getListingTrust } from '../services/listing-trust';
 
 const SORTS: Record<string, string> = {
   newest:      'created_at DESC',
-  price_low:   'COALESCE(price_usd_cents, 999999999) ASC',
-  price_high:  'COALESCE(price_usd_cents, 0) DESC',
+  price_low:   'COALESCE(price_usd, 999999999) ASC',
+  price_high:  'COALESCE(price_usd, 0) DESC',
   views:       'COALESCE(view_count, 0) DESC',
-  relevance: "CASE WHEN source_code = 'untera' AND main_image_url IS NOT NULL THEN 0 WHEN source_code = 'untera' THEN 1 WHEN country_code = 'UG' THEN 2 WHEN country_code IN ('KE','NG','TZ','RW') THEN 3 ELSE 4 END, created_at DESC",
+  relevance: "CASE WHEN country_code = 'UG' THEN 0 WHEN country_code IN ('KE','NG','TZ','RW') THEN 1 WHEN source_code = 'jiji' THEN 2 WHEN source_code = 'untera' AND main_image_url IS NOT NULL THEN 3 ELSE 4 END, is_featured DESC, created_at DESC",
 };
 
 const route: FastifyPluginAsync = async (app) => {
@@ -32,8 +33,8 @@ const route: FastifyPluginAsync = async (app) => {
     if (q.source)      add('source_code = ?',             q.source);
     if (q.verification)add('verification = ?',            q.verification);
     if (q.bedrooms)    add('bedrooms >= ?',               Number(q.bedrooms));
-    if (q.minPrice)    add('price_usd_cents >= ?',        Number(q.minPrice));
-    if (q.maxPrice)    add('price_usd_cents <= ?',        Number(q.maxPrice));
+    if (q.minPrice)    add('price_usd >= ?',        Number(q.minPrice));
+    if (q.maxPrice)    add('price_usd <= ?',        Number(q.maxPrice));
     if (q.q) {
       where.push(`(title ILIKE $${i} OR description ILIKE $${i} OR city ILIKE $${i} OR country ILIKE $${i})`);
       args.push(`%${q.q}%`);
@@ -46,7 +47,7 @@ const route: FastifyPluginAsync = async (app) => {
     const sql = `
       SELECT id, slug, title, description, city, country, country_code, source_code,
              latitude, longitude, bedrooms, bathrooms, property_type,
-             listing_type, price_amount, price_usd_cents, currency,
+             listing_type, price_amount, price_usd, currency,
              price_period, main_image_url, verification, is_featured,
              source_code, source_url, created_at
       FROM listings
@@ -82,7 +83,8 @@ const route: FastifyPluginAsync = async (app) => {
       });
     }
     pool.query(`UPDATE listings SET view_count = COALESCE(view_count,0)+1 WHERE id = $1`, [r.rows[0].id]).catch(() => {});
-    return { success: true, data: { listing: r.rows[0] } };
+    const trust = await getListingTrust(r.rows[0].id).catch(() => null);
+    return { success: true, data: { listing: r.rows[0], trust } };
   });
 
   // ── GET /stats ───────────────────────────────────────────

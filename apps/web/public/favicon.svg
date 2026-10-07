@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background Circle -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="houseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e7ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Rounded Square Background -->
+  <rect x="10" y="10" width="180" height="180" rx="40" fill="url(#bgGrad)"/>
+  
+  <!-- House Icon -->
+  <!-- House Body -->
+  <rect x="55" y="85" width="90" height="70" rx="6" fill="url(#houseGrad)"/>
+  
+  <!-- House Roof -->
+  <polygon points="100,40 40,90 160,90" fill="#ffffff"/>
+  
+  <!-- Door -->
+  <rect x="88" y="115" width="24" height="40" rx="10" fill="#3b82f6"/>
+  
+  <!-- Door Handle -->
+  <circle cx="105" cy="137" r="3" fill="#ffffff"/>
+  
+  <!-- Left Window -->
+  <rect x="65" y="100" width="20" height="18" rx="3" fill="#3b82f6"/>
+  
+  <!-- Right Window -->
+  <rect x="115" y="100" width="20" height="18" rx="3" fill="#3b82f6"/>
+  
+  <!-- Window Shine -->
+  <line x1="65" y1="109" x2="85" y2="109" stroke="#93c5fd" stroke-width="1.5"/>
+  <line x1="115" y1="109" x2="135" y2="109" stroke="#93c5fd" stroke-width="1.5"/>
+  
+  <!-- Small Heart Above House -->
+  <path d="M100,30 C95,25 85,30 85,37 C85,44 95,50 100,52 C105,50 115,44 115,37 C115,30 105,25 100,30 Z" fill="#fbbf24"/>
+  
+  <!-- Sparkle -->
+  <path d="M145,45 L148,52 L155,55 L148,58 L145,65 L142,58 L135,55 L142,52 Z" fill="#fbbf24" opacity="0.9"/>
+  
+  <!-- Small Sparkle -->
+  <path d="M50,50 L52,54 L56,56 L52,58 L50,62 L48,58 L44,56 L48,54 Z" fill="#ffffff" opacity="0.7"/>
+</svg>

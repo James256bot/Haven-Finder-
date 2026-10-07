@@ -62,7 +62,7 @@ const route: FastifyPluginAsync = async (app) => {
          l.id, l.slug, l.title, l.description,
          l.city, l.country, l.country_code, l.latitude, l.longitude,
          l.bedrooms, l.bathrooms, l.property_type,
-         l.listing_type, l.price_amount, l.price_usd_cents, l.currency,
+         l.listing_type, l.price_amount, l.price_usd, l.currency,
          l.price_period, l.main_image_url, l.verification,
          l.is_featured, l.source_code, l.source_url,
          f.created_at AS favorited_at

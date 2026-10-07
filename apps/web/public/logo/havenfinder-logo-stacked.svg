@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 180" fill="none">
+  <defs>
+    <linearGradient id="sbg" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2e5aff"/>
+      <stop offset="1" stop-color="#0646cc"/>
+    </linearGradient>
+  </defs>
+  <rect x="32" y="0" width="96" height="96" rx="24" fill="url(#sbg)"/>
+  <path d="M80 20 C66 20 55 31 55 45 C55 62 80 84 80 84 C80 84 105 62 105 45 C105 31 94 20 80 20 Z"
+        fill="#ffffff" opacity="0.15"/>
+  <path d="M67 52 L80 39 L93 52 L93 66 L87 66 L87 57 L73 57 L73 66 L67 66 Z"
+        fill="#ffffff"/>
+  <text x="80" y="144" text-anchor="middle" font-family="Sora, Inter, system-ui, sans-serif" font-size="26" font-weight="800" letter-spacing="-1" fill="#0f172a">
+    Haven<tspan fill="#0a5cff">Finder</tspan>
+  </text>
+  <text x="80" y="166" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="500" letter-spacing="2" fill="#64748b">
+    FIND YOUR HAVEN
+  </text>
+</svg>

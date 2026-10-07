@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useFavorites } from '../stores/favorites';
+import { useToast } from './Toast';
 
 export function FavoriteButton({
   listingId,
@@ -14,6 +15,7 @@ export function FavoriteButton({
   const loaded = useFavorites(s => s.loaded);
   const load = useFavorites(s => s.load);
   const toggle = useFavorites(s => s.toggle);
+  const { show } = useToast();
 
   useEffect(() => { if (!loaded) load(); }, [loaded, load]);
 
@@ -31,10 +33,12 @@ export function FavoriteButton({
   if (variant === 'overlay') {
     return (
       <button
-        onClick={(e) => {
+        onClick={async (e) => {
           e.preventDefault();
           e.stopPropagation();
-          toggle(listingId);
+          const r = await toggle(listingId);
+          if (r.ok) show(r.favorited ? 'Saved to favorites' : 'Removed from favorites', 'success');
+          else show('Could not save. Try again.', 'error');
         }}
         aria-label={active ? 'Remove from favorites' : 'Save to favorites'}
         className={`${dims} rounded-full bg-white/95 backdrop-blur shadow-md flex items-center justify-center hover:scale-110 transition-transform`}
@@ -54,7 +58,11 @@ export function FavoriteButton({
 
   return (
     <button
-      onClick={() => toggle(listingId)}
+      onClick={async () => {
+        const r = await toggle(listingId);
+        if (r.ok) show(r.favorited ? 'Saved to favorites' : 'Removed from favorites', 'success');
+        else show('Could not save. Try again.', 'error');
+      }}
       className={`w-full px-4 py-3 rounded-xl border font-medium transition-colors flex items-center justify-center gap-2 ${
         active
           ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none">
+  <rect x="0" y="4" width="56" height="56" rx="16" fill="#ffffff"/>
+  <path d="M22 32 L28 26 L34 32 L34 40 L31 40 L31 35 L25 35 L25 40 L22 40 Z" fill="#0a5cff"/>
+  <text x="74" y="41" font-family="Sora, Inter, system-ui, sans-serif" font-size="28" font-weight="800" letter-spacing="-1" fill="#ffffff">
+    Haven<tspan fill="#5482ff">Finder</tspan>
+  </text>
+</svg>

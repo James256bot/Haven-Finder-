@@ -2,6 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 
 const ALLOWED = new Set([
   'pictures-uganda.jijistatic.com',
+  'picsum.photos',
   'pictures-ke.jijistatic.com',
   'pictures-ng.jijistatic.com',
   'api.untera.io',

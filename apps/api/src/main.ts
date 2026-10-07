@@ -27,6 +27,7 @@ import webhooksRoute from './routes/webhooks';
 import marketingRoute from './routes/marketing';
 import adminRoute from './routes/admin';
 import reportsRoute from './routes/reports';
+import aiSearchRoute from './routes/ai-search';
 import migrateOnce from './routes/migrate-once';
 import adminBootstrap from './routes/admin-bootstrap';
 import seedOnce from './routes/seed-once';
@@ -76,6 +77,7 @@ async function main() {
   await app.register(marketingRoute);
   await app.register(adminRoute);
   await app.register(reportsRoute);
+  await app.register(aiSearchRoute);
   await app.register(migrateOnce);
   await app.register(adminBootstrap);
   await app.register(seedOnce);

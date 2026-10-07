@@ -16,13 +16,15 @@ const FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="#e2e8f0"/><text x="600" y="400" font-family="system-ui" font-size="48" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle">No image</text></svg>`
 );
 
-const API = 'https://havenfinderapi-production.up.railway.app';
-
 function resolveImage(raw?: string | null): string {
   if (!raw) return FALLBACK;
-  if (raw.includes('jijistatic.com')) return `${API}/img?url=${encodeURIComponent(raw)}`;
-  if (raw.includes('untera.io') || raw.includes('untera-images')) return `${API}/img?url=${encodeURIComponent(raw)}`;
-  if (raw.startsWith('/uploads/')) return `${API}${raw}`;
+  // Jiji images serve fine directly — skip the proxy
+  if (raw.includes('jijistatic.com')) return raw;
+  // Untera images need the proxy
+  if (raw.includes('untera.io') || raw.includes('untera-images')) {
+    return `https://havenfinderapi-production.up.railway.app/img?url=${encodeURIComponent(raw)}`;
+  }
+  if (raw.startsWith('/uploads/')) return `https://havenfinderapi-production.up.railway.app${raw}`;
   return raw;
 }
 

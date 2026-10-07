@@ -10,26 +10,11 @@ function resolveImage(raw?: string | null): string {
   if (!raw) return 'data:image/svg+xml;utf8,' + encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="#e2e8f0"/><text x="400" y="300" font-family="system-ui" font-size="32" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle">No image</text></svg>'
   );
-
-  // Jiji images — proxy through our API
-  if (raw.includes('jijistatic.com')) {
-    return `${API}/img?url=${encodeURIComponent(raw)}`;
-  }
-
-  // Untera images — proxy through our API
+  if (raw.includes('jijistatic.com')) return raw;
   if (raw.includes('untera.io') || raw.includes('untera-images')) {
-    return `${API}/img?url=${encodeURIComponent(raw)}`;
+    return `https://havenfinderapi-production.up.railway.app/img?url=${encodeURIComponent(raw)}`;
   }
-
-  // Already a data URI or local path
-  if (raw.startsWith('data:') || raw.startsWith('/uploads/')) {
-    if (raw.startsWith('/uploads/')) {
-      return `${API}${raw}`;
-    }
-    return raw;
-  }
-
-  // Anything else — return as-is
+  if (raw.startsWith('/uploads/')) return `https://havenfinderapi-production.up.railway.app${raw}`;
   return raw;
 }
 

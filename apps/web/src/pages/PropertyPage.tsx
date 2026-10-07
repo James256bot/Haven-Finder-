@@ -5,7 +5,6 @@ import { PriceDisplay } from '../components/PriceDisplay';
 import { VerificationBadge } from '../components/VerificationBadge';
 import { LoadingState } from '../components/LoadingState';
 import { EmptyState } from '../components/EmptyState';
-import { imageSrc } from '../utils/image-url';
 import { ViewingForm } from '../components/ViewingForm';
 import { MessageOwnerButton } from '../components/MessageOwnerButton';
 import { FavoriteButton } from '../components/FavoriteButton';
@@ -16,6 +15,17 @@ import { ReportButton } from '../components/ReportButton';
 const FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="#e2e8f0"/><text x="600" y="400" font-family="system-ui" font-size="48" fill="#94a3b8" text-anchor="middle" dominant-baseline="middle">No image</text></svg>`
 );
+
+const API = 'https://havenfinderapi-production.up.railway.app';
+
+function resolveImage(raw?: string | null): string {
+  if (!raw) return FALLBACK;
+  if (raw.includes('jijistatic.com')) return `${API}/img?url=${encodeURIComponent(raw)}`;
+  if (raw.includes('untera.io') || raw.includes('untera-images')) return `${API}/img?url=${encodeURIComponent(raw)}`;
+  if (raw.startsWith('/uploads/')) return `${API}${raw}`;
+  return raw;
+}
+
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
@@ -42,7 +52,7 @@ export function PropertyPage() {
   if (error || !data) return <div className="container-page py-10"><EmptyState title="Property not found" message={String(error ?? '')} /></div>;
 
   const l = data.listing;
-  const src = imageSrc(l.main_image_url) || FALLBACK;
+  const src = resolveImage(l.main_image_url) || FALLBACK;
   const location = [l.city, l.country].filter(Boolean).join(', ') || 'Location not specified';
   const action = l.listing_type === 'rent' ? 'For rent'
     : l.listing_type === 'sale' ? 'For sale'

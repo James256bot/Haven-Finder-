@@ -50,8 +50,24 @@ export function SearchPage() {
   };
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['search', filters, q, offset],
-    queryFn: () => api.listings({ ...filters, q, limit: PAGE_SIZE, offset }),
+    queryKey: ['search', filters, q, params.get('raw'), offset],
+    queryFn: async () => {
+    const raw = params.get('raw') ?? '';
+    if (raw && raw.trim()) {
+      const res = await fetch('https://havenfinderapi-production.up.railway.app/ai/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: raw, limit: PAGE_SIZE, offset }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error?.message ?? 'Search failed');
+      return {
+        listings: json.data.listings ?? [],
+        total: json.data.total ?? json.data.listings?.length ?? 0,
+      };
+    }
+    return api.listings({ ...filters, q, limit: PAGE_SIZE, offset });
+  },
     staleTime: 30_000,
   });
 

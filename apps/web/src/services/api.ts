@@ -3,7 +3,7 @@ import type { ApiResponse, Listing, MapPin } from '../types';
 // In dev: Vite proxy forwards /api → localhost:3001 and strips /api.
 // In prod: VITE_API_URL points at Railway, which has no /api prefix.
 const VITE_API = (import.meta as any).env?.VITE_API_URL as string | undefined;
-const BASE = VITE_API ? VITE_API : '/api';
+const BASE = 'https://havenfinderapi-production.up.railway.app';
 
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(BASE + path);

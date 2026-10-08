@@ -27,7 +27,7 @@ const route: FastifyPluginAsync = async (app) => {
     };
 
     if (q.country)     add('country_code = ?',            q.country.toUpperCase());
-    if (q.city)        add('LOWER(city) = ?',             q.city.toLowerCase());
+    if (q.city) { const c = q.city.toLowerCase(); where.push(`(LOWER(city) = $${i} OR EXISTS (SELECT 1 FROM locations loc WHERE loc.id = location_id AND (LOWER(loc.name) = $${i} OR LOWER(loc.slug) = $${i})))`); args.push(c); i++; }
     if (q.listingType) add('listing_type = ?',            q.listingType);
     if (q.propertyType)add('property_type = ?',           q.propertyType);
     if (q.source)      add('source_code = ?',             q.source);

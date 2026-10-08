@@ -83,7 +83,8 @@ function toSql(p: ParsedQuery) {
     args.push(`%${p.nearUniversity}%`);
     i++;
   }
-  if (p.q) {
+  const hasStructured = p.bedrooms || p.bathrooms || p.propertyType || p.neighborhood || p.city || p.maxPrice || p.minPrice || p.country;
+  if (p.q && !hasStructured) {
     where.push(`(LOWER(title) LIKE $${i} OR LOWER(description) LIKE $${i} OR LOWER(city) LIKE $${i})`);
     args.push(`%${p.q}%`);
     i++;

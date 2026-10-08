@@ -1,5 +1,11 @@
 import type { ParsedQuery } from './schema';
 
+const WORD_NUM: Record<string, number> = {
+  one: 1, two: 2, three: 3, four: 4, five: 5,
+  six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+};
+
+
 const PROPERTY_TYPES: Record<string, string> = {
   apartment: 'apartment', apt: 'apartment', flat: 'apartment', flats: 'apartment',
   house: 'house', home: 'house', bungalow: 'house',
@@ -126,10 +132,18 @@ export function parseQueryRules(input: string): ParsedQuery {
   }
 
   // Bedrooms / bathrooms
-  const bd = lower.match(/\b(\d+)\s*(?:bed(?:room)?s?|br|bd)\b/);
-  if (bd) { result.bedrooms = parseInt(bd[1], 10); consumed.push(`${bd[1]} bed`); }
-  const ba = lower.match(/\b(\d+)\s*(?:bath(?:room)?s?|ba)\b/);
-  if (ba) { result.bathrooms = parseInt(ba[1], 10); consumed.push(`${ba[1]} bath`); }
+  const bd = lower.match(/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*(?:bed(?:room)?s?|br|bd)\b/);
+  if (bd) {
+    const raw = String(bd[1]).toLowerCase();
+    const n = WORD_NUM[raw] ?? parseInt(raw, 10);
+    if (!Number.isNaN(n)) { result.bedrooms = n; consumed.push(`${raw} bed`); }
+  }
+  const ba = lower.match(/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*(?:bath(?:room)?s?|ba)\b/);
+  if (ba) {
+    const raw = String(ba[1]).toLowerCase();
+    const n = WORD_NUM[raw] ?? parseInt(raw, 10);
+    if (!Number.isNaN(n)) { result.bathrooms = n; consumed.push(`${raw} bath`); }
+  }
 
   // Furnishing
   if (/\bfurnished\b/.test(lower) && !/\bunfurnished\b/.test(lower)) {

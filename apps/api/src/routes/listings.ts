@@ -70,7 +70,7 @@ const route: FastifyPluginAsync = async (app) => {
   app.get('/listings/:slug', async (req, reply) => {
     const { slug } = req.params as { slug: string };
     const r = await pool.query(
-      `SELECT l.*, u.full_name AS owner_name, u.email AS owner_email
+      `SELECT l.*, u.full_name AS owner_name, u.email AS owner_email, u.phone_e164 AS owner_phone
        FROM listings l
        LEFT JOIN users u ON u.id = l.user_id
        WHERE l.slug = $1 AND l.status = 'published'`,

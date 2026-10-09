@@ -22,6 +22,9 @@ export type Listing = {
   source_code: string | null;
   source_url: string | null;
   created_at?: string;
+  owner_name?: string | null;
+  owner_email?: string | null;
+  owner_phone?: string | null;
 };
 
 export type ApiResponse<T> = {

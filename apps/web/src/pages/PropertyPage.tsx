@@ -7,6 +7,7 @@ import { LoadingState } from '../components/LoadingState';
 import { EmptyState } from '../components/EmptyState';
 import { ViewingForm } from '../components/ViewingForm';
 import { MessageOwnerButton } from '../components/MessageOwnerButton';
+import { WhatsAppButton } from '../components/WhatsAppButton';
 import { FavoriteButton } from '../components/FavoriteButton';
 import { Seo } from '../components/Seo';
 import { TrustBadge } from '../components/TrustBadge';
@@ -193,6 +194,13 @@ export function PropertyPage() {
                 </div>
 
                 <div className="mt-6 space-y-3">
+                  {console.log('PHONE DEBUG:', l.owner_phone, '| title:', l.title)}
+                  <WhatsAppButton
+                    phone={l.owner_phone}
+                    listingTitle={l.title}
+                    listingSlug={l.slug}
+                    city={l.city}
+                  />
                   <MessageOwnerButton listingId={l.id} listingTitle={l.title} />
                   <ViewingForm listingId={l.id} listingTitle={l.title} />
                 </div>

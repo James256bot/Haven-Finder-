@@ -2,10 +2,13 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// PWA is disabled when TERMUX_DISABLE_PWA=1 is set (Termux terser bug)
+const PWA_DISABLED = process.env.TERMUX_DISABLE_PWA === '1';
+
 export default defineConfig({
   plugins: [
     react(),
-    VitePWA({
+    ...(PWA_DISABLED ? [] : [VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'logo/*.svg'],
       manifest: {
@@ -45,7 +48,7 @@ export default defineConfig({
           },
         ],
       },
-    }),
+    })]),
   ],
   server: {
     host: '0.0.0.0',

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { ToastProvider } from './components/Toast';
 import App from './App';
+import { Analytics } from '@vercel/analytics/react';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <BrowserRouter>
           <ToastProvider>
             <App />
+            <Analytics />
           </ToastProvider>
         </BrowserRouter>
       </QueryClientProvider>

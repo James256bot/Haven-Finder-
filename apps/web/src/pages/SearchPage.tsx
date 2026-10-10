@@ -2,6 +2,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { api } from '../services/api';
+import { SaveSearchButton } from '../components/SaveSearchButton';
 import { PropertyCard } from '../components/PropertyCard';
 import { LoadingState } from '../components/LoadingState';
 import { EmptyState } from '../components/EmptyState';
@@ -99,6 +100,11 @@ export function SearchPage() {
               <p className="text-sm text-slate-500 mt-0.5">
                 {isLoading ? 'Searching…' : `${total.toLocaleString()} propert${total === 1 ? 'y' : 'ies'} found`}
               </p>
+              {(params.get('raw') || q) && (
+                <div className="mt-2">
+                  <SaveSearchButton />
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-2 flex-shrink-0">

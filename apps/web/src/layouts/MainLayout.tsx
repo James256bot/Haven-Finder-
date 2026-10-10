@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { MobileNav } from '../components/MobileNav';
+import { NotificationBell } from '../components/NotificationBell';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { useEffect, useState } from 'react';
 
@@ -46,6 +47,7 @@ export function MainLayout() {
             </nav>
 
             <div className="flex items-center gap-2">
+              <NotificationBell />
               <Link to="/login" className="hidden sm:block text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-2">Sign in</Link>
               <Link to="/list" className="btn btn-primary btn-md hidden sm:inline-flex">List a property</Link>
               <button onClick={() => setMenuOpen(o => !o)} className="md:hidden w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100" aria-label="Menu">

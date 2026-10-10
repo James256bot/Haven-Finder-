@@ -5,7 +5,9 @@ export async function getListingTrust(listingId: string): Promise<TrustResult | 
   const r = await pool.query(
     `SELECT l.price_usd, l.bedrooms, l.city, l.country_code, l.source_code,
             l.main_image_url, l.description, l.created_at,
+            l.latitude, l.longitude,
             u.verification AS owner_verification,
+            u.phone_e164 AS owner_phone,
             u.created_at AS owner_created_at,
             (SELECT COUNT(*)::int FROM listings WHERE user_id = l.user_id) AS owner_listing_count,
             (SELECT COUNT(*)::int FROM listing_images WHERE listing_id = l.id) AS image_count
@@ -32,5 +34,7 @@ export async function getListingTrust(listingId: string): Promise<TrustResult | 
     ownerAccountAgeDays: row.owner_created_at
       ? Math.floor((Date.now() - new Date(row.owner_created_at).getTime()) / 86400000)
       : 0,
+    hasCoordinates: row.latitude != null && row.longitude != null,
+    hasOwnerPhone: !!row.owner_phone,
   });
 }

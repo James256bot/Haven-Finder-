@@ -1,26 +1,35 @@
-type Trust = {
-  score: number;
-  label: 'trusted' | 'caution' | 'risky' | 'unknown';
-  signals: { code: string; label: string; severity: string; scoreDelta: number }[];
+type Badge = {
+  code: string;
+  label: string;
+  icon: string;
 };
 
-export function TrustBadge({ trust }: { trust: Trust | null }) {
-  if (!trust || trust.label === 'unknown') return null;
+type Trust = {
+  score?: number;
+  label?: 'trusted' | 'caution' | 'risky' | 'unknown';
+  badges?: Badge[];
+  signals?: any[];
+};
 
-  const styles = {
-    trusted:  'bg-emerald-50 text-emerald-700 ring-emerald-200',
-    caution:  'bg-amber-50 text-amber-700 ring-amber-200',
-    risky:    'bg-red-50 text-red-700 ring-red-200',
-    unknown:  'bg-ink-50 text-ink-600 ring-ink-200',
-  };
-  const labels = { trusted: 'High Trust', caution: 'Some Caution', risky: 'Use Caution', unknown: 'Not Rated' };
-  const icons = { trusted: '✓', caution: '!', risky: '⚠', unknown: '?' };
+const MAX_BADGES = 5;
+
+export function TrustBadge({ trust }: { trust: Trust | null }) {
+  if (!trust) return null;
+
+  const badges = (trust.badges ?? []).slice(0, MAX_BADGES);
+  if (badges.length === 0) return null;
 
   return (
-    <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold ring-1 ${styles[trust.label]}`}>
-      <span className="text-base leading-none">{icons[trust.label]}</span>
-      <span>{labels[trust.label]}</span>
-      <span className="text-xs opacity-70">· {trust.score}/100</span>
+    <div className="flex flex-wrap gap-2">
+      {badges.map(b => (
+        <span
+          key={b.code}
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+        >
+          <span className="text-sm leading-none">{b.icon}</span>
+          <span>{b.label}</span>
+        </span>
+      ))}
     </div>
   );
 }

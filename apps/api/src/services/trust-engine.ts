@@ -6,10 +6,17 @@ export type Signal = {
   evidence?: string;
 };
 
+export type Badge = {
+  code: string;
+  label: string;
+  icon: string;
+};
+
 export type TrustResult = {
-  score: number;              // 0-100
-  label: 'trusted' | 'caution' | 'risky' | 'unknown';
-  signals: Signal[];
+  score: number;              // internal use only — not shown to users
+  label: 'trusted' | 'caution' | 'risky' | 'unknown';  // internal
+  signals: Signal[];          // internal — admin/debug
+  badges: Badge[];            // ✅ what the frontend displays
 };
 
 type ListingContext = {
@@ -25,12 +32,53 @@ type ListingContext = {
   ownerVerification: 'unverified' | 'pending' | 'verified' | 'suspended';
   ownerListingCount: number;
   ownerAccountAgeDays: number;
+  hasCoordinates?: boolean;
+  hasOwnerPhone?: boolean;
 };
 
 export function computeTrust(ctx: ListingContext): TrustResult {
   const signals: Signal[] = [];
+  const badges: Badge[] = [];
 
-  // ═══ POSITIVE SIGNALS ═══
+  // ═══ BADGES (positive only — what users see) ═══
+
+  if (ctx.ownerVerification === 'verified') {
+    badges.push({ code: 'VERIFIED', label: 'Verified listing', icon: '✓' });
+  }
+
+  if (ctx.imageCount >= 5 || (ctx.imageCount === 0 && ctx.hasImages)) {
+    badges.push({ code: 'MANY_PHOTOS', label: '5+ photos', icon: '📸' });
+  } else if (ctx.imageCount >= 3) {
+    badges.push({ code: 'MULTIPLE_PHOTOS', label: 'Multiple photos', icon: '📸' });
+  }
+
+  if (ctx.descriptionLength > 200) {
+    badges.push({ code: 'DETAILED', label: 'Detailed description', icon: '📝' });
+  }
+
+  if (ctx.hasCoordinates) {
+    badges.push({ code: 'MAPPED', label: 'Location mapped', icon: '📍' });
+  }
+
+  if (ctx.hasOwnerPhone || ctx.ownerListingCount > 0) {
+    badges.push({ code: 'CONTACTABLE', label: 'Owner contactable', icon: '👤' });
+  }
+
+  if (ctx.ownerListingCount > 3 && ctx.ownerAccountAgeDays > 30) {
+    badges.push({ code: 'ESTABLISHED', label: 'Established agent', icon: '⭐' });
+  }
+
+  if (ctx.priceUsd > 0) {
+    badges.push({ code: 'PRICED', label: 'Priced', icon: '💰' });
+  }
+
+  // If nothing positive yet, at least say when it was recently listed
+  if (badges.length === 0 && ctx.createdDaysAgo < 7) {
+    badges.push({ code: 'NEW', label: 'Newly listed', icon: '🆕' });
+  }
+
+  // ═══ SIGNALS (internal — retained for admin/debug) ═══
+
   if (ctx.ownerVerification === 'verified') {
     signals.push({ code: 'VERIFIED_OWNER', label: 'Verified owner', severity: 'positive', scoreDelta: 15 });
   }
@@ -44,7 +92,6 @@ export function computeTrust(ctx: ListingContext): TrustResult {
     signals.push({ code: 'DETAILED_DESCRIPTION', label: 'Detailed property description', severity: 'positive', scoreDelta: 5 });
   }
 
-  // ═══ RISK SIGNALS ═══
   if (!ctx.hasImages || ctx.imageCount === 0) {
     signals.push({ code: 'NO_PHOTOS', label: 'No photos provided', severity: 'high', scoreDelta: -25 });
   }
@@ -67,13 +114,12 @@ export function computeTrust(ctx: ListingContext): TrustResult {
     signals.push({ code: 'SUSPENDED_OWNER', label: 'Owner account is suspended', severity: 'high', scoreDelta: -50 });
   }
 
-  // ═══ TOTAL ═══
   const raw = 50 + signals.reduce((s, x) => s + x.scoreDelta, 0);
   const score = Math.max(0, Math.min(100, raw));
   const label: TrustResult['label'] =
     score >= 75 ? 'trusted' :
     score >= 50 ? 'caution' :
-    score >= 25 ? 'risky' : 'risky';
+    'risky';
 
-  return { score, label, signals };
+  return { score, label, signals, badges };
 }

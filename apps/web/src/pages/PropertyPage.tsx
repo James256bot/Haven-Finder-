@@ -194,7 +194,6 @@ export function PropertyPage() {
                 </div>
 
                 <div className="mt-6 space-y-3">
-                  {console.log('PHONE DEBUG:', l.owner_phone, '| title:', l.title)}
                   <WhatsAppButton
                     phone={l.owner_phone}
                     listingTitle={l.title}

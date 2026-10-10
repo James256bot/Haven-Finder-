@@ -5,6 +5,8 @@ import { EmptyState } from '../components/EmptyState';
 import { LoadingState } from '../components/LoadingState';
 import type { Listing } from '../types';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 export function FavoritesPage() {
   const [items, setItems] = useState<Listing[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +16,7 @@ export function FavoritesPage() {
     const tk = localStorage.getItem('hf_token');
     if (!tk) { nav('/login'); return; }
 
-    fetch('/api/me/favorites', { headers: { Authorization: `Bearer ${tk}` } })
+    fetch(`${API}/me/favorites`, { headers: { Authorization: `Bearer ${tk}` } })
       .then(r => r.json())
       .then(j => {
         if (!j.success) throw new Error(j.error?.message ?? 'Failed');

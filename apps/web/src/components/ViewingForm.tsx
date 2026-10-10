@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 export function ViewingForm({ listingId, listingTitle }: { listingId: string; listingTitle: string }) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState('');
@@ -23,7 +25,7 @@ export function ViewingForm({ listingId, listingTitle }: { listingId: string; li
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/listings/${listingId}/viewings`, {
+      const res = await fetch(`${API}/listings/${listingId}/viewings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

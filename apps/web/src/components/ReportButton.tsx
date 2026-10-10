@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useToast } from './Toast';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 const REASONS = [
   { value: 'scam', label: 'Scam or fraud' },
   { value: 'wrong_price', label: 'Wrong price' },
@@ -24,7 +26,7 @@ export function ReportButton({ listingId }: { listingId: string }) {
     if (!tk) { show('Sign in to report', 'info'); return; }
     setBusy(true);
     try {
-      const res = await fetch(`/api/listings/${listingId}/report`, {
+      const res = await fetch(`${API}/listings/${listingId}/report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tk}` },
         body: JSON.stringify({ reason, details }),

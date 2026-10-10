@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 const PROPERTY_TYPES = [
   'apartment','house','villa','condo','studio','room','hostel','guest_house',
   'office','shop','warehouse','restaurant_space','commercial_building',
@@ -60,7 +62,7 @@ export function ListPropertyPage() {
   async function createDraft() {
     setBusy(true); setError(null);
     try {
-      const res = await fetch('/api/me/listings', {
+      const res = await fetch(`${API}/me/listings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tk()}` },
         body: JSON.stringify({
@@ -93,7 +95,7 @@ export function ListPropertyPage() {
     if (!listingId) return;
     const fd = new FormData();
     fd.append('file', file);
-    const res = await fetch(`/api/me/listings/${listingId}/images`, {
+    const res = await fetch(`${API}/me/listings/${listingId}/images`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${tk()}` },
       body: fd,
@@ -105,7 +107,7 @@ export function ListPropertyPage() {
 
   async function removeImage(id: string) {
     if (!listingId) return;
-    await fetch(`/api/me/listings/${listingId}/images/${id}`, {
+    await fetch(`${API}/me/listings/${listingId}/images/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${tk()}` },
     });
@@ -116,12 +118,12 @@ export function ListPropertyPage() {
     if (!listingId) return;
     setBusy(true); setError(null);
     try {
-      await fetch(`/api/me/listings/${listingId}`, {
+      await fetch(`${API}/me/listings/${listingId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tk()}` },
         body: JSON.stringify({ title, description }),
       });
-      const res = await fetch(`/api/me/listings/${listingId}/publish`, {
+      const res = await fetch(`${API}/me/listings/${listingId}/publish`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${tk()}` },
       });

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 type Msg = {
   id: string;
   sender_id: string;
@@ -39,12 +41,12 @@ export function ConversationPage() {
   })();
 
   async function load() {
-    const res = await fetch(`/api/conversations/${id}`, { headers: { Authorization: `Bearer ${tk()}` } });
+    const res = await fetch(`${API}/conversations/${id}`, { headers: { Authorization: `Bearer ${tk()}` } });
     const j = await res.json();
     if (!j.success) { nav('/messages'); return; }
     setConvo(j.data.conversation);
     setMsgs(j.data.messages);
-    fetch(`/api/conversations/${id}/read`, { method: 'PATCH', headers: { Authorization: `Bearer ${tk()}` } }).catch(() => {});
+    fetch(`${API}/conversations/${id}/read`, { method: 'PATCH', headers: { Authorization: `Bearer ${tk()}` } }).catch(() => {});
   }
 
   useEffect(() => {
@@ -61,7 +63,7 @@ export function ConversationPage() {
     if (!text.trim()) return;
     setBusy(true);
     try {
-      await fetch(`/api/conversations/${id}/messages`, {
+      await fetch(`${API}/conversations/${id}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tk()}` },
         body: JSON.stringify({ content: text }),

@@ -5,6 +5,8 @@ import { MapView, type Cluster } from '../components/MapView';
 import { EmptyState } from '../components/EmptyState';
 import { Seo } from '../components/Seo';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 const COUNTRIES = [
   { code: '',   label: 'All countries' },
   { code: 'UG', label: 'Uganda' },
@@ -34,7 +36,7 @@ export function MapPage() {
     queryKey: ['map-clusters', country, Math.floor(zoom / 2)],
     queryFn: async () => {
       const res = await fetch(
-        `/api/listings/map/clusters?zoom=${zoom}&limit=800${country ? `&country=${country}` : ''}`,
+        `${API}/listings/map/clusters?zoom=${zoom}&limit=800${country ? `&country=${country}` : ''}`,
       );
       const j = await res.json();
       return j.success ? (j.data.clusters as Cluster[]) : [];

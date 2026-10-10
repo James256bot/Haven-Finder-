@@ -38,7 +38,7 @@ export function FavoriteButton({
           e.stopPropagation();
           const r = await toggle(listingId);
           if (r.ok) show(r.favorited ? 'Saved to favorites' : 'Removed from favorites', 'success');
-          else show('Could not save. Try again.', 'error');
+          else show(`Error: ${(r as any).error ?? 'unknown'}`, 'error');
         }}
         aria-label={active ? 'Remove from favorites' : 'Save to favorites'}
         className={`${dims} rounded-full bg-white/95 backdrop-blur shadow-md flex items-center justify-center hover:scale-110 transition-transform`}
@@ -61,7 +61,7 @@ export function FavoriteButton({
       onClick={async () => {
         const r = await toggle(listingId);
         if (r.ok) show(r.favorited ? 'Saved to favorites' : 'Removed from favorites', 'success');
-        else show('Could not save. Try again.', 'error');
+        else show(`Error: ${(r as any).error ?? 'unknown'}`, 'error');
       }}
       className={`w-full px-4 py-3 rounded-xl border font-medium transition-colors flex items-center justify-center gap-2 ${
         active

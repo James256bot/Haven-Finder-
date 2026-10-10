@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EmptyState } from '../components/EmptyState';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 type Post = {
   id: string;
   platform: string;
@@ -36,7 +38,7 @@ export function MarketingPage() {
 
   async function load() {
     try {
-      const res = await fetch('/api/me/marketing/posts', { headers: { Authorization: `Bearer ${token()}` } });
+      const res = await fetch(`${API}/me/marketing/posts`, { headers: { Authorization: `Bearer ${token()}` } });
       const j = await res.json();
       if (!j.success) throw new Error(j.error?.message ?? 'Failed');
       setPosts(j.data.posts);
@@ -49,7 +51,7 @@ export function MarketingPage() {
   }, [nav]);
 
   async function regenerate(listingId: string) {
-    await fetch(`/api/me/marketing/posts/${listingId}/regenerate`, {
+    await fetch(`${API}/me/marketing/posts/${listingId}/regenerate`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token()}` },
     });
@@ -65,7 +67,7 @@ export function MarketingPage() {
   }
 
   async function markPublished(id: string) {
-    await fetch(`/api/me/marketing/posts/${id}/mark-published`, {
+    await fetch(`${API}/me/marketing/posts/${id}/mark-published`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
       body: JSON.stringify({}),

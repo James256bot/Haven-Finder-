@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EmptyState } from '../components/EmptyState';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 type Convo = {
   id: string;
   listing_id: string | null;
@@ -24,7 +26,7 @@ export function MessagesPage() {
   useEffect(() => {
     const tk = localStorage.getItem('hf_token');
     if (!tk) { nav('/login'); return; }
-    fetch('/api/me/conversations', { headers: { Authorization: `Bearer ${tk}` } })
+    fetch(`${API}/me/conversations`, { headers: { Authorization: `Bearer ${tk}` } })
       .then(r => r.json())
       .then(j => { if (!j.success) throw new Error(j.error?.message); setItems(j.data.conversations); })
       .catch(e => setError(e.message));

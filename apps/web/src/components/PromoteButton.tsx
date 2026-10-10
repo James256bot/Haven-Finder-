@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 const TIERS = [
   { id: 'boost',    label: 'Boost',    price: 'UGX 10,000', days: '7 days',  desc: 'Top of neighborhood search' },
   { id: 'featured', label: 'Featured', price: 'UGX 30,000', days: '14 days', desc: 'Homepage + search results' },
@@ -16,7 +18,7 @@ export function PromoteButton({ listingId }: { listingId: string }) {
   async function submit() {
     setBusy(true); setError(null);
     try {
-      const res = await fetch(`/api/me/listings/${listingId}/promote`, {
+      const res = await fetch(`${API}/me/listings/${listingId}/promote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

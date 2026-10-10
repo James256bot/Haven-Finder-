@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EmptyState } from '../components/EmptyState';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 type Incoming = {
   id: string;
   status: string;
@@ -41,7 +43,7 @@ export function OwnerViewingsPage() {
 
   async function load() {
     try {
-      const res = await fetch('/api/me/incoming', {
+      const res = await fetch(`${API}/me/incoming`, {
         headers: { Authorization: `Bearer ${token()}` },
       });
       const j = await res.json();
@@ -60,7 +62,7 @@ export function OwnerViewingsPage() {
   async function respond(id: string, status: string) {
     setBusy(id);
     try {
-      const res = await fetch(`/api/viewings/${id}`, {
+      const res = await fetch(`${API}/viewings/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

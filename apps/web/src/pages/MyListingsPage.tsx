@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { EmptyState } from '../components/EmptyState';
 import { PromoteButton } from '../components/PromoteButton';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 type Row = {
   id: string; slug: string; title: string; status: string;
   city: string | null; price_amount: string | null;
@@ -29,7 +31,7 @@ export function MyListingsPage() {
     const tk = localStorage.getItem('hf_token');
     if (!tk) { nav('/login'); return; }
     try {
-      const res = await fetch('/api/me/listings', { headers: { Authorization: `Bearer ${tk}` } });
+      const res = await fetch(`${API}/me/listings`, { headers: { Authorization: `Bearer ${tk}` } });
       const j = await res.json();
       if (!j.success) throw new Error(j.error?.message ?? 'Failed');
       setItems(j.data.listings);
@@ -41,7 +43,7 @@ export function MyListingsPage() {
   async function del(id: string) {
     if (!confirm('Delete this listing?')) return;
     const tk = localStorage.getItem('hf_token') ?? '';
-    await fetch(`/api/me/listings/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${tk}` } });
+    await fetch(`${API}/me/listings/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${tk}` } });
     await load();
   }
 

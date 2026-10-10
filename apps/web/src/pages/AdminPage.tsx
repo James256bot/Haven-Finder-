@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EmptyState } from '../components/EmptyState';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 type Tab = 'overview' | 'verifications' | 'promotions' | 'listings' | 'users' | 'reports';
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
@@ -26,7 +28,7 @@ export function AdminPage() {
   const token = () => localStorage.getItem('hf_token') ?? '';
 
   async function loadOverview() {
-    const res = await fetch('/api/admin/overview', { headers: { Authorization: `Bearer ${token()}` } });
+    const res = await fetch(`${API}/admin/overview`, { headers: { Authorization: `Bearer ${token()}` } });
     const j = await res.json();
     if (j.success) setOverview(j.data);
   }
@@ -41,8 +43,8 @@ export function AdminPage() {
 
       if (t === 'verifications') { endpoint = '/api/admin/verifications'; key = 'verifications'; }
       else if (t === 'promotions') { endpoint = '/api/admin/promotions'; key = 'promotions'; }
-      else if (t === 'listings') { endpoint = `/api/admin/listings?status=${listingFilter}`; key = 'listings'; }
-      else if (t === 'users') { endpoint = `/api/admin/users${search ? `?q=${encodeURIComponent(search)}` : ''}`; key = 'users'; }
+      else if (t === 'listings') { endpoint = `${API}/admin/listings?status=${listingFilter}`; key = 'listings'; }
+      else if (t === 'users') { endpoint = `${API}/admin/users${search ? `?q=${encodeURIComponent(search)}` : ''}`; key = 'users'; }
       else if (t === 'reports') { endpoint = '/api/admin/reports'; key = 'reports'; }
 
       const res = await fetch(endpoint, { headers: { Authorization: `Bearer ${token()}` } });
@@ -60,7 +62,7 @@ export function AdminPage() {
 
   async function verifyAction(id: string, status: 'approved' | 'rejected') {
     const note = status === 'rejected' ? (prompt('Reason for rejection?') ?? '') : '';
-    await fetch(`/api/admin/verifications/${id}`, {
+    await fetch(`${API}/admin/verifications/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
       body: JSON.stringify({ status, adminNote: note }),
@@ -70,7 +72,7 @@ export function AdminPage() {
   }
 
   async function activatePromotion(id: string) {
-    await fetch(`/api/admin/promotions/${id}/activate`, {
+    await fetch(`${API}/admin/promotions/${id}/activate`, {
       method: 'PATCH', headers: { Authorization: `Bearer ${token()}` },
     });
     loadTab('promotions');
@@ -79,14 +81,14 @@ export function AdminPage() {
 
   async function cancelPromotion(id: string) {
     if (!confirm('Cancel this promotion and refund?')) return;
-    await fetch(`/api/admin/promotions/${id}/cancel`, {
+    await fetch(`${API}/admin/promotions/${id}/cancel`, {
       method: 'PATCH', headers: { Authorization: `Bearer ${token()}` },
     });
     loadTab('promotions');
   }
 
   async function moderateListing(id: string, action: 'approve' | 'reject' | 'suspend' | 'restore') {
-    await fetch(`/api/admin/listings/${id}`, {
+    await fetch(`${API}/admin/listings/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
       body: JSON.stringify({ action }),
@@ -96,7 +98,7 @@ export function AdminPage() {
   }
 
   async function moderateUser(id: string, action: 'ban' | 'unban' | 'promote_owner' | 'promote_agent' | 'demote') {
-    await fetch(`/api/admin/users/${id}`, {
+    await fetch(`${API}/admin/users/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
       body: JSON.stringify({ action }),

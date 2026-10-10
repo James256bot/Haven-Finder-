@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 export function MessageOwnerButton({ listingId, listingTitle }: { listingId: string; listingTitle: string }) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
@@ -15,7 +17,7 @@ export function MessageOwnerButton({ listingId, listingTitle }: { listingId: str
     if (!tk()) { nav('/login'); return; }
     setBusy(true); setError(null);
     try {
-      const res = await fetch(`/api/listings/${listingId}/messages`, {
+      const res = await fetch(`${API}/listings/${listingId}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tk()}` },
         body: JSON.stringify({ content: text }),

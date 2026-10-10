@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EmptyState } from '../components/EmptyState';
 
+const API = (import.meta.env.VITE_API as string) || 'https://havenfinderapi-production.up.railway.app';
+
 type Viewing = {
   id: string; status: string;
   preferred_date: string; preferred_time: string;
@@ -32,8 +34,8 @@ export function DashboardPage() {
     if (!tk) { nav('/login'); return; }
 
     Promise.all([
-      fetch('/api/me/viewings', { headers: { Authorization: `Bearer ${tk}` } }).then(r => r.json()),
-      fetch('/api/me/favorites/ids', { headers: { Authorization: `Bearer ${tk}` } }).then(r => r.json()),
+      fetch(`${API}/me/viewings`, { headers: { Authorization: `Bearer ${tk}` } }).then(r => r.json()),
+      fetch(`${API}/me/favorites/ids`, { headers: { Authorization: `Bearer ${tk}` } }).then(r => r.json()),
     ])
       .then(([v, f]) => {
         if (!v.success) throw new Error(v.error?.message ?? 'Failed');

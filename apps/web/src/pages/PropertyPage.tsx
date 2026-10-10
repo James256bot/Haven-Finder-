@@ -8,6 +8,8 @@ import { EmptyState } from '../components/EmptyState';
 import { ViewingForm } from '../components/ViewingForm';
 import { MessageOwnerButton } from '../components/MessageOwnerButton';
 import { WhatsAppButton } from '../components/WhatsAppButton';
+import { PropertyMap } from '../components/PropertyMap';
+import { VideoInspectionButton } from '../components/VideoInspectionButton';
 import { FavoriteButton } from '../components/FavoriteButton';
 import { Seo } from '../components/Seo';
 import { TrustBadge } from '../components/TrustBadge';
@@ -159,7 +161,30 @@ export function PropertyPage() {
             <div>
               <h2 className="h3 text-slate-900 mb-3">Location</h2>
               <div className="card overflow-hidden">
-                <div className="aspect-[16/9] bg-slate-100 flex items-center justify-center">
+                <div className="aspect-[16/9] bg-slate-100 flex items-center justify-center relative">
+                  {l.latitude != null && l.longitude != null ? (
+                    <>
+                      <div className="absolute inset-0">
+                        <PropertyMap
+                          lat={Number(l.latitude)}
+                          lng={Number(l.longitude)}
+                          height="100%"
+                        />
+                      </div>
+                      <a
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${l.latitude},${l.longitude}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="absolute bottom-3 right-3 z-[500] inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white shadow-lg text-slate-800 hover:bg-slate-50 text-sm font-medium"
+                      >
+                        <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 2 C8 2 5 5 5 9 C5 14 12 22 12 22 C12 22 19 14 19 9 C19 5 16 2 12 2 Z" />
+                          <circle cx="12" cy="9" r="2.5" />
+                        </svg>
+                        Get directions
+                      </a>
+                    </>
+                  ) : (
                   <div className="text-center">
                     <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center mx-auto mb-3">
                       <svg viewBox="0 0 24 24" className="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" strokeWidth="2">
@@ -170,6 +195,7 @@ export function PropertyPage() {
                     <p className="text-sm font-medium text-slate-700">{location}</p>
                     <p className="text-xs text-slate-500 mt-1">Exact address shared after viewing is confirmed</p>
                   </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -195,6 +221,12 @@ export function PropertyPage() {
 
                 <div className="mt-6 space-y-3">
                   <WhatsAppButton
+                    phone={l.owner_phone}
+                    listingTitle={l.title}
+                    listingSlug={l.slug}
+                    city={l.city}
+                  />
+                  <VideoInspectionButton
                     phone={l.owner_phone}
                     listingTitle={l.title}
                     listingSlug={l.slug}

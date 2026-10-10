@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../services/api';
@@ -9,6 +10,7 @@ import { ViewingForm } from '../components/ViewingForm';
 import { MessageOwnerButton } from '../components/MessageOwnerButton';
 import { WhatsAppButton } from '../components/WhatsAppButton';
 import { PropertyMap } from '../components/PropertyMap';
+import { trackView } from '../hooks/useRecentlyViewed';
 import { VideoInspectionButton } from '../components/VideoInspectionButton';
 import { FavoriteButton } from '../components/FavoriteButton';
 import { Seo } from '../components/Seo';
@@ -53,11 +55,31 @@ export function PropertyPage() {
     enabled: !!slug,
   });
 
+  const trackingId = data?.listing?.id;
+
+  useEffect(() => {
+    const item = data?.listing;
+    if (!item?.id) return;
+    trackView({
+      id: item.id,
+      slug: item.slug,
+      title: item.title,
+      price_amount: item.price_amount,
+      currency: item.currency,
+      price_period: item.price_period,
+      main_image_url: item.main_image_url,
+      city: item.city,
+      country: item.country,
+      bedrooms: item.bedrooms,
+    });
+  }, [trackingId]);
+
   if (isLoading) return <div className="container-page py-10"><LoadingState count={2} /></div>;
   if (error || !data) return <div className="container-page py-10"><EmptyState title="Property not found" message={String(error ?? '')} /></div>;
 
   const l = data.listing;
   const src = resolveImage(l.main_image_url) || FALLBACK;
+
   const location = [l.city, l.country].filter(Boolean).join(', ') || 'Location not specified';
   const action = l.listing_type === 'rent' ? 'For rent'
     : l.listing_type === 'sale' ? 'For sale'

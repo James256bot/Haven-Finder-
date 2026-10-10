@@ -5,6 +5,7 @@ import { SearchBar } from '../components/SearchBar';
 import { PropertyCard } from '../components/PropertyCard';
 import { LoadingState } from '../components/LoadingState';
 import { EmptyState } from '../components/EmptyState';
+import { RecentlyViewedRail } from '../components/RecentlyViewedRail';
 import { Seo } from '../components/Seo';
 
 const POPULAR = ['Kampala', 'Kololo', 'Ntinda', 'Kisaasi', 'Naguru', 'Muyenga', 'Nairobi', 'Lagos'];
@@ -78,10 +79,14 @@ export function HomePage() {
         </div>
       </section>
 
+      <RecentlyViewedRail />
+
       <section className="container-page py-12">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-ink-900">Featured properties</h2>
+            <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-ink-900">
+            Featured properties
+          </h2>
             <p className="text-slate-500 text-sm mt-1.5">Freshly listed and ready to view</p>
           </div>
           <Link to="/search" className="text-sm font-medium text-brand-600 hover:text-brand-700">View all →</Link>

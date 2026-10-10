@@ -18,7 +18,7 @@ const route: FastifyPluginAsync = async (app) => {
     const offset = Math.max(Number(q.offset ?? 0), 0);
     const sort   = SORTS[q.sort ?? 'relevance'] ?? SORTS.relevance;
 
-    const where: string[] = [`status = 'published'`];
+    const where: string[] = [`status = 'published'`, `is_visible = true`];
     const args: unknown[] = [];
     let i = 1;
     const add = (clause: string, val: unknown) => {
@@ -91,10 +91,10 @@ const route: FastifyPluginAsync = async (app) => {
   app.get('/stats', async () => {
     const r = await pool.query(`
       SELECT
-        COUNT(*) FILTER (WHERE status='published') AS published,
-        COUNT(DISTINCT country_code) FILTER (WHERE status='published') AS countries,
-        COUNT(DISTINCT city) FILTER (WHERE status='published') AS cities,
-        COUNT(*) FILTER (WHERE is_seed = false AND source_code IS NOT NULL) AS real_listings
+        COUNT(*) FILTER (WHERE status='published' AND is_visible = true) AS published,
+        COUNT(DISTINCT country_code) FILTER (WHERE status='published' AND is_visible = true) AS countries,
+        COUNT(DISTINCT city) FILTER (WHERE status='published' AND is_visible = true) AS cities,
+        COUNT(*) FILTER (WHERE is_visible = true AND is_seed = false AND source_code IS NOT NULL) AS real_listings
       FROM listings`);
     return { success: true, data: r.rows[0] };
   });

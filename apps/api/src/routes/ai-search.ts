@@ -27,7 +27,7 @@ function checkRateLimit(ip: string): boolean {
 }
 
 function toSql(p: ParsedQuery) {
-  const where: string[] = [`status = 'published'`];
+  const where: string[] = [`status = 'published'`, `is_visible = true`];
   const args: any[] = [];
   let i = 1;
 

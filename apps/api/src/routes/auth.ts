@@ -2,6 +2,8 @@ import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 import { pool } from '../lib/db';
 import { hashPassword, verifyPassword } from '../services/password';
+import { recordLoginAttempt, checkAccountLock, clearLoginFailures } from '../services/login-lockout';
+import { logAudit } from '../services/audit';
 import {
   signAccessToken, newRefreshToken, hashRefreshToken,
 } from '../services/tokens';
@@ -85,6 +87,13 @@ const route: FastifyPluginAsync = async (app) => {
     );
     const user = r.rows[0];
     const session = await issueSession(app, reply, user, req.headers['user-agent'], req.ip);
+    await logAudit({
+      userId: user.id,
+      action: 'signup.success',
+      ip: req.ip ?? null,
+      userAgent: (req.headers['user-agent'] as string) ?? null,
+      metadata: { email: user.email },
+    });
 
     return reply.code(201).send({
       success: true,
@@ -95,6 +104,21 @@ const route: FastifyPluginAsync = async (app) => {
   // ── POST /auth/login ──────────────────────────────────────
   app.post('/auth/login', { config: { rateLimit: { max: 5, timeWindow: '1 minute' } } }, async (req, reply) => {
     const body = LoginBody.parse(req.body);
+    const ip = req.ip ?? null;
+    const ua = (req.headers['user-agent'] as string) ?? null;
+
+    // Account-level lockout (independent of per-IP rate limit)
+    const lock = await checkAccountLock(body.email);
+    if (lock.locked) {
+      await logAudit({ action: 'login.locked', ip, userAgent: ua, success: false, metadata: { email: body.email } });
+      return reply.code(429).send({
+        success: false,
+        error: {
+          code: 'ACCOUNT_LOCKED',
+          message: `Too many failed attempts. Try again in ${lock.retryAfterMinutes} minutes.`,
+        },
+      });
+    }
 
     const r = await pool.query(
       `SELECT id, email, password_hash, full_name, role, is_active, is_banned,
@@ -104,6 +128,8 @@ const route: FastifyPluginAsync = async (app) => {
     );
     const user = r.rows[0];
     if (!user || !user.password_hash) {
+      await recordLoginAttempt(body.email, ip, false);
+      await logAudit({ action: 'login.failed', ip, userAgent: ua, success: false, metadata: { email: body.email, reason: 'no_user' } });
       return reply.code(401).send({
         success: false,
         error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' },
@@ -124,12 +150,18 @@ const route: FastifyPluginAsync = async (app) => {
 
     const ok = await verifyPassword(body.password, user.password_hash);
     if (!ok) {
+      await recordLoginAttempt(body.email, ip, false);
+      await logAudit({ userId: user.id, action: 'login.failed', ip, userAgent: ua, success: false, metadata: { email: body.email, reason: 'bad_password' } });
       return reply.code(401).send({
         success: false,
         error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' },
       });
     }
 
+    // Success — clear failures + audit
+    await recordLoginAttempt(body.email, ip, true);
+    await clearLoginFailures(body.email);
+    await logAudit({ userId: user.id, action: 'login.success', ip, userAgent: ua });
     await pool.query('UPDATE users SET last_login_at = now() WHERE id = $1', [user.id]);
 
     const { password_hash, is_active, is_banned, ...safe } = user;

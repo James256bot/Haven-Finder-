@@ -36,6 +36,8 @@ import seedOnce from './routes/seed-once';
 
 async function main() {
   const app = Fastify({
+    bodyLimit: 1 * 1024 * 1024,  // 1 MB max request body
+    trustProxy: true,
     logger: {
       level: config.env === 'production' ? 'info' : 'debug',
       transport: config.env === 'production' ? undefined : { target: 'pino-pretty' },
@@ -47,12 +49,31 @@ async function main() {
   await app.register(errorsPlugin);
   await app.register(cacheControlPlugin);
   await app.register(xmlParserPlugin);
-  await app.register(helmet, { contentSecurityPolicy: false });
+  await app.register(helmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://vercel.live"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:", "blob:"],
+        connectSrc: ["'self'", "https://havenfinderapi-production.up.railway.app", "https://*.vercel.app"],
+        fontSrc: ["'self'", "data:"],
+        objectSrc: ["'none'"],
+        frameAncestors: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+    hsts: { maxAge: 15552000, includeSubDomains: true, preload: true },
+  });
   await app.register(cors, {
     origin: true,
     credentials: true,
   });
-  await app.register(rateLimit, { max: 100, timeWindow: '1 minute' });
+  await app.register(rateLimit, { max: 200, timeWindow: '1 minute', ban: 3 });
   await app.register(cookie);
   await app.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } });
   await app.register(fastifyStatic, {

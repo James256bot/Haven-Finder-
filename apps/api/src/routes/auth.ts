@@ -9,7 +9,15 @@ import { config } from '../config';
 
 const RegisterBody = z.object({
   email: z.string().email().max(255),
-  password: z.string().min(8).max(128),
+  password: z.string()
+    .min(8, 'Password must be at least 8 characters')
+    .max(128)
+    .refine(v => /[0-9]/.test(v) || /[^A-Za-z0-9]/.test(v), {
+      message: 'Password must include a number or symbol',
+    })
+    .refine(v => !['password', '12345678', 'qwertyui', 'password1', 'letmein1'].includes(v.toLowerCase()), {
+      message: 'Password is too common',
+    }),
   fullName: z.string().min(1).max(255),
   countryCode: z.string().length(2).toUpperCase().optional(),
   locale: z.string().max(10).optional(),
@@ -49,7 +57,7 @@ async function issueSession(app: any, reply: any, user: any, ua?: string, ip?: s
 
 const route: FastifyPluginAsync = async (app) => {
   // ── POST /auth/register ───────────────────────────────────
-  app.post('/auth/register', async (req, reply) => {
+  app.post('/auth/register', { config: { rateLimit: { max: 3, timeWindow: '10 minutes' } } }, async (req, reply) => {
     const body = RegisterBody.parse(req.body);
 
     const exists = await pool.query('SELECT id FROM users WHERE email = $1', [body.email]);
@@ -85,7 +93,7 @@ const route: FastifyPluginAsync = async (app) => {
   });
 
   // ── POST /auth/login ──────────────────────────────────────
-  app.post('/auth/login', async (req, reply) => {
+  app.post('/auth/login', { config: { rateLimit: { max: 5, timeWindow: '1 minute' } } }, async (req, reply) => {
     const body = LoginBody.parse(req.body);
 
     const r = await pool.query(
@@ -131,7 +139,7 @@ const route: FastifyPluginAsync = async (app) => {
   });
 
   // ── POST /auth/refresh ────────────────────────────────────
-  app.post('/auth/refresh', async (req, reply) => {
+  app.post('/auth/refresh', { config: { rateLimit: { max: 30, timeWindow: '1 hour' } } }, async (req, reply) => {
     const raw = (req as any).cookies?.[config.cookieName]
       ?? (req.body as any)?.refreshToken;
     if (!raw) {

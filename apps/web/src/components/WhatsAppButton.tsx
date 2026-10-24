@@ -1,3 +1,5 @@
+import { trackLead } from '../hooks/useLeadTracking';
+
 export function WhatsAppButton({
   phone,
   listingTitle,
@@ -8,6 +10,7 @@ export function WhatsAppButton({
   listingTitle: string;
   listingSlug: string;
   city?: string | null;
+  listingId?: string | null;
 }) {
   if (!phone) return null;
 
@@ -22,8 +25,7 @@ export function WhatsAppButton({
   );
 
   return (
-    <a
-      href={`https://wa.me/${intl}?text=${msg}`}
+    <a onClick={() => listingId && trackLead(listingId, 'whatsapp')} href={`https://wa.me/${intl}?text=${msg}`}
       target="_blank"
       rel="noopener noreferrer"
       className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-white font-medium transition-colors"

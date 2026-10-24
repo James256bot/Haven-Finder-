@@ -12,6 +12,8 @@ type Row = {
   main_image_url: string | null;
   view_count: number | null; favorite_count: number | null; inquiry_count: number | null;
   image_count: number; created_at: string;
+  leads_count?: number | null;
+  leads_7d?: number | null;
 };
 
 const STATUS_STYLE: Record<string, string> = {
@@ -52,6 +54,8 @@ export function MyListingsPage() {
     published: items.filter(x => x.status === 'published').length,
     views: items.reduce((sum, x) => sum + (x.view_count ?? 0), 0),
     favorites: items.reduce((sum, x) => sum + (x.favorite_count ?? 0), 0),
+    leads: items.reduce((sum, x) => sum + (x.leads_count ?? 0), 0),
+    leadsWeek: items.reduce((sum, x) => sum + (x.leads_7d ?? 0), 0),
   } : null;
 
   return (
@@ -137,6 +141,14 @@ export function MyListingsPage() {
                     <Metric icon="eye" value={l.view_count ?? 0} label="views" />
                     <Metric icon="heart" value={l.favorite_count ?? 0} label="favorites" />
                     <Metric icon="chat" value={l.inquiry_count ?? 0} label="inquiries" />
+                    {(l.leads_count ?? 0) > 0 && (
+                      <Metric icon="phone" value={l.leads_count ?? 0} label="leads" />
+                    )}
+                    {(l.leads_7d ?? 0) > 0 && (
+                      <span className="text-emerald-600 font-medium">
+                        +{l.leads_7d} this week
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -172,6 +184,7 @@ function Metric({ icon, value, label }: { icon: string; value: number; label: st
     eye: <><circle cx="10" cy="10" r="6" /><path d="M3 10 L10 4 L17 10" /></>,
     heart: <path d="M17 4a4 4 0 00-7 2 4 4 0 00-7-2c-2 2-2 5 0 7l7 7 7-7c2-2 2-5 0-7z" />,
     chat: <path d="M18 10 A8 8 0 1 1 10 2 L18 2 L18 10 Z" />,
+    phone: <path d="M4 3 C4 3 6 3 7 5 L8 7 C8.5 8 7.5 9 7 9.5 L6 10.5 C6 10.5 7 13 10 15 C13 17 15.5 18 15.5 18 L16.5 17 C17 16.5 18 15.5 19 16 L21 17 C23 18 23 20 23 20 C20 22 17 21 14 19 C11 17 8 14 6 11 C4 8 3 5 4 3 Z" />,
   };
   return (
     <span className="inline-flex items-center gap-1.5">

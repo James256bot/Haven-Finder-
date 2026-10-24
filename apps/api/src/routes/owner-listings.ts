@@ -93,7 +93,9 @@ const route: FastifyPluginAsync = async (app) => {
               l.listing_type, l.bedrooms, l.bathrooms,
               l.view_count, l.favorite_count, l.inquiry_count,
               l.created_at, l.updated_at,
-              (SELECT COUNT(*) FROM listing_images WHERE listing_id = l.id)::int AS image_count
+              (SELECT COUNT(*) FROM listing_images WHERE listing_id = l.id)::int AS image_count,
+              (SELECT COUNT(*) FROM leads WHERE listing_id = l.id)::int AS leads_count,
+              (SELECT COUNT(*) FROM leads WHERE listing_id = l.id AND created_at > now() - interval '7 days')::int AS leads_7d
        FROM listings l
        WHERE l.user_id = $1
        ORDER BY l.created_at DESC

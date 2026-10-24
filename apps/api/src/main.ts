@@ -28,6 +28,7 @@ import marketingRoute from './routes/marketing';
 import adminRoute from './routes/admin';
 import reportsRoute from './routes/reports';
 import aiSearchRoute from './routes/ai-search';
+import leadsRoute from './routes/leads';
 import savedSearchesRoute from './routes/saved-searches';
 import notificationsRoute from './routes/notifications';
 import migrateOnce from './routes/migrate-once';
@@ -101,6 +102,7 @@ async function main() {
   await app.register(adminRoute);
   await app.register(reportsRoute);
   await app.register(aiSearchRoute);
+  await app.register(leadsRoute);
   await app.register(savedSearchesRoute);
   await app.register(notificationsRoute);
   await app.register(migrateOnce);

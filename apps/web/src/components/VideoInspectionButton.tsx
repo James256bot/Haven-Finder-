@@ -1,3 +1,5 @@
+import { trackLead } from '../hooks/useLeadTracking';
+
 export function VideoInspectionButton({
   phone,
   listingTitle,
@@ -8,6 +10,7 @@ export function VideoInspectionButton({
   listingTitle: string;
   listingSlug: string;
   city?: string | null;
+  listingId?: string | null;
 }) {
   // If no phone, hide the button — nothing to request against
   if (!phone) return null;
@@ -23,8 +26,7 @@ export function VideoInspectionButton({
   );
 
   return (
-    <a
-      href={`https://wa.me/${intl}?text=${msg}`}
+    <a onClick={() => listingId && trackLead(listingId, 'video_inspection')} href={`https://wa.me/${intl}?text=${msg}`}
       target="_blank"
       rel="noopener noreferrer"
       className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-purple-500 text-purple-700 hover:bg-purple-50 font-medium transition-colors"

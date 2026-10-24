@@ -246,12 +246,14 @@ export function PropertyPage() {
                     phone={l.owner_phone}
                     listingTitle={l.title}
                     listingSlug={l.slug}
+                    listingId={l.id}
                     city={l.city}
                   />
                   <VideoInspectionButton
                     phone={l.owner_phone}
                     listingTitle={l.title}
                     listingSlug={l.slug}
+                    listingId={l.id}
                     city={l.city}
                   />
                   <MessageOwnerButton listingId={l.id} listingTitle={l.title} />

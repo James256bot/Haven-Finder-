@@ -12,6 +12,7 @@ import { WhatsAppButton } from '../components/WhatsAppButton';
 import { PropertyMap } from '../components/PropertyMap';
 import { trackView } from '../hooks/useRecentlyViewed';
 import { VideoInspectionButton } from '../components/VideoInspectionButton';
+import { PropertyVideoGenerator } from '../components/PropertyVideoGenerator';
 import { FavoriteButton } from '../components/FavoriteButton';
 import { Seo } from '../components/Seo';
 import { TrustBadge } from '../components/TrustBadge';
@@ -256,6 +257,7 @@ export function PropertyPage() {
                     listingId={l.id}
                     city={l.city}
                   />
+                  <PropertyVideoGenerator listing={l} />
                   <MessageOwnerButton listingId={l.id} listingTitle={l.title} />
                   <ViewingForm listingId={l.id} listingTitle={l.title} />
                 </div>

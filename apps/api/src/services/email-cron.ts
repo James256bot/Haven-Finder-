@@ -59,7 +59,10 @@ export async function runAdvancedEmailEngine() {
     FROM users u
     JOIN listings l ON l.user_id = u.id
     LEFT JOIN leads ON leads.listing_id = l.id
-    WHERE u.intent = 'agent' AND l.deleted_at IS NULL
+    WHERE u.intent = 'agent' 
+      AND l.deleted_at IS NULL
+      AND u.email NOT LIKE '%@%.test'
+      AND u.email NOT LIKE '%@example.com'
     GROUP BY u.id, u.email, u.full_name
   `);
 
@@ -82,7 +85,10 @@ export async function runAdvancedEmailEngine() {
     SELECT u.id, u.email, u.full_name, ss.filters->>'city' as city
     FROM users u
     JOIN saved_searches ss ON ss.user_id = u.id
-    WHERE u.intent = 'renter' AND ss.filters->>'city' IS NOT NULL
+    WHERE u.intent = 'renter' 
+      AND ss.filters->>'city' IS NOT NULL
+      AND u.email NOT LIKE '%@%.test'
+      AND u.email NOT LIKE '%@example.com'
   `);
 
   for (const renter of renters.rows) {

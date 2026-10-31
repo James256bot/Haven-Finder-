@@ -28,7 +28,11 @@ export function AdminPage() {
   const token = () => localStorage.getItem('hf_token') ?? '';
 
   async function loadOverview() {
-    const res = await fetch(`${API}/admin/overview`, { headers: { Authorization: `Bearer ${token()}` } });
+    const res = await fetch(`${API}/admin/overview`, { headers: { Authorization: `Bearer ${token()}` } })
+      .then(r => { 
+        if (r.status === 401) { localStorage.removeItem('hf_token'); window.location.reload(); }
+        return r.json(); 
+      });
     const j = await res.json();
     if (j.success) setOverview(j.data);
   }

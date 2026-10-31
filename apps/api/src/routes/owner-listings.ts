@@ -97,7 +97,7 @@ const route: FastifyPluginAsync = async (app) => {
               (SELECT COUNT(*) FROM leads WHERE listing_id = l.id)::int AS leads_count,
               (SELECT COUNT(*) FROM leads WHERE listing_id = l.id AND created_at > now() - interval '7 days')::int AS leads_7d
        FROM listings l
-       WHERE l.user_id = $1
+       WHERE l.user_id = $1 AND l.deleted_at IS NULL
        ORDER BY l.created_at DESC
        LIMIT 200`,
       [req.user!.sub],

@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { pool } from '../lib/db';
-import { sendWeeklyLeadDigests } from '../services/email-cron';
+import { runAdvancedEmailEngine } from '../services/email-cron';
 
 async function requireAdmin(req: any, reply: any) {
   const role = req.user?.role;
@@ -191,8 +191,8 @@ const route: FastifyPluginAsync = async (app) => {
   // ── TEST /admin/test-emails ──
   app.post('/admin/test-emails', async (req, reply) => {
     try {
-      await sendWeeklyLeadDigests();
-      return { success: true, message: 'Emails triggered. Check console logs.' };
+      await runAdvancedEmailEngine();
+      return { success: true, message: 'Advanced email engine triggered. Check console logs.' };
     } catch (err: any) {
       return reply.code(500).send({ success: false, error: err.message });
     }

@@ -29,6 +29,7 @@ import adminRoute from './routes/admin';
 import reportsRoute from './routes/reports';
 import aiSearchRoute from './routes/ai-search';
 import leadsRoute from './routes/leads';
+import wantedRoute from './routes/wanted';
 import mtnPromoteRoute from './routes/mtn-promote';
 import savedSearchesRoute from './routes/saved-searches';
 import notificationsRoute from './routes/notifications';
@@ -104,6 +105,7 @@ async function main() {
   await app.register(reportsRoute);
   await app.register(aiSearchRoute);
   await app.register(leadsRoute);
+  await app.register(wantedRoute);
   await app.register(mtnPromoteRoute);
   await app.register(savedSearchesRoute);
   await app.register(notificationsRoute);

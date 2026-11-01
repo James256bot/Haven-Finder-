@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import { MainLayout } from './layouts/MainLayout';
 import { HomePage } from './pages/HomePage';
 import { SavedSearchesPage } from './pages/SavedSearchesPage';
+import { WantedPage } from './pages/WantedPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 
 const SearchPage       = lazy(() => import('./pages/SearchPage').then(m => ({ default: m.SearchPage })));
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="/messages/:id"    element={wrap(<ConversationPage />)} />
         <Route path="/favorites"       element={wrap(<FavoritesPage />)} />
         <Route path="/saved-searches"  element={wrap(<SavedSearchesPage />)} />
+        <Route path="/wanted"          element={wrap(<WantedPage />)} />
         <Route path="/notifications"   element={wrap(<NotificationsPage />)} />
         <Route path="/list"            element={wrap(<ListPropertyPage />)} />
         <Route path="/marketing"       element={wrap(<MarketingPage />)} />

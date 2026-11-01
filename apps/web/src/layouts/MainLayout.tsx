@@ -44,6 +44,7 @@ export function MainLayout() {
               <NavLink to="/my-listings" className={navClass}>My listings</NavLink>
               <NavLink to="/messages" className={navClass}>Messages</NavLink>
               <NavLink to="/dashboard" className={navClass}>Dashboard</NavLink>
+              <NavLink to="/wanted" className={navClass}>Wanted</NavLink>
             </nav>
 
             <div className="flex items-center gap-2">
@@ -68,6 +69,7 @@ export function MainLayout() {
               <NavLink to="/dashboard" className={navClass + ' py-3'}>Dashboard</NavLink>
               <NavLink to="/favorites" className={navClass + ' py-3'}>Saved</NavLink>
               <NavLink to="/marketing" className={navClass + ' py-3'}>Marketing</NavLink>
+              <NavLink to="/wanted" className={navClass + ' py-3'}>Property Wanted</NavLink>
               <div className="border-t border-slate-100 my-2" />
               <Link to="/login" className="py-3 text-sm font-medium text-slate-600">Sign in</Link>
               <Link to="/list" className="btn btn-primary btn-md mt-2">List a property</Link>

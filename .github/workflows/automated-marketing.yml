@@ -1,0 +1,23 @@
+name: Automated Marketing Engine
+
+on:
+  schedule:
+    # Runs every Monday at 8:00 AM UTC
+    - cron: '0 8 * * 1'
+    # Runs every day at 10:00 AM UTC
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  trigger-emails:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Weekly Agent Reports
+        if: github.event.schedule == '0 8 * * 1' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://havenfinderapi-production.up.railway.app/admin/test-emails
+
+      - name: Send Daily Property Matches
+        if: github.event.schedule == '0 10 * * *' || github.event_name == 'workflow_dispatch'
+        run: |
+          curl -X POST https://havenfinderapi-production.up.railway.app/admin/run-matchmaker

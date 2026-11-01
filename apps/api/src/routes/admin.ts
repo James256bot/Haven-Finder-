@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { pool } from '../lib/db';
 import { runAdvancedEmailEngine } from '../services/email-cron';
+import { runMatchmakerEngine } from '../services/matchmaker';
 
 async function requireAdmin(req: any, reply: any) {
   const role = req.user?.role;
@@ -193,6 +194,16 @@ const route: FastifyPluginAsync = async (app) => {
     try {
       await runAdvancedEmailEngine();
       return { success: true, message: 'Advanced email engine triggered. Check console logs.' };
+    } catch (err: any) {
+      return reply.code(500).send({ success: false, error: err.message });
+    }
+  });
+
+  // ── TEST /admin/run-matchmaker ──
+  app.post('/admin/run-matchmaker', async (req, reply) => {
+    try {
+      await runMatchmakerEngine();
+      return { success: true, message: 'Matchmaker engine triggered. Check console logs.' };
     } catch (err: any) {
       return reply.code(500).send({ success: false, error: err.message });
     }

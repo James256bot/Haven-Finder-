@@ -9,6 +9,7 @@ const WantedBody = z.object({
   maxPrice: z.number().optional(),
   bedrooms: z.number().optional(),
   contactPhone: z.string().min(9),
+  contactEmail: z.string().email().optional(),
 });
 
 const route: FastifyPluginAsync = async (app) => {
@@ -18,9 +19,9 @@ const route: FastifyPluginAsync = async (app) => {
     const userId = req.user?.sub ?? null;
 
     const r = await pool.query(
-      `INSERT INTO wanted_requests (user_id, title, description, city, max_price, bedrooms, contact_phone)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [userId, body.title, body.description, body.city, body.maxPrice, body.bedrooms, body.contactPhone]
+      `INSERT INTO wanted_requests (user_id, title, description, city, max_price, bedrooms, contact_phone, contact_email)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [userId, body.title, body.description, body.city, body.maxPrice, body.bedrooms, body.contactPhone, body.contactEmail]
     );
     return { success: true, data: { request: r.rows[0] } };
   });

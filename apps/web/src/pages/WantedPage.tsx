@@ -12,6 +12,7 @@ export function WantedPage() {
   const [bedrooms, setBedrooms] = useState('2');
   const [maxPrice, setMaxPrice] = useState('');
   const [phone, setPhone] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -29,7 +30,7 @@ export function WantedPage() {
       const res = await fetch(`${API}/wanted`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, city, bedrooms: Number(bedrooms), maxPrice: Number(maxPrice) || undefined, contactPhone: phone }),
+        body: JSON.stringify({ title, city, bedrooms: Number(bedrooms), maxPrice: Number(maxPrice) || undefined, contactPhone: phone, contactEmail }),
       });
       const j = await res.json();
       if (!j.success) throw new Error(j.error?.message ?? 'Failed');
@@ -82,6 +83,10 @@ export function WantedPage() {
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">WhatsApp Number</label>
               <input required value={phone} onChange={e => setPhone(e.target.value)} placeholder="256..." className="w-full p-3 rounded-xl border border-slate-300" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email (for property alerts)</label>
+              <input type="email" value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="you@example.com" className="w-full p-3 rounded-xl border border-slate-300" />
             </div>
           </div>
           <button type="submit" disabled={submitting} className="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:opacity-50">

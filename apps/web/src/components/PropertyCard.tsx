@@ -29,7 +29,7 @@ export function PropertyCard({ listing }: { listing: Listing }) {
   const imgUrl = resolveImage(listing.main_image_url);
 
   return (
-    <Link to={`/property/${listing.slug}`} className="group block card card-hover overflow-hidden">
+    <Link to={`/listing/${listing.slug}`} className="group block card card-hover overflow-hidden">
       <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
         <img
           src={imgUrl}

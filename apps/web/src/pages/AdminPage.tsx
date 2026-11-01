@@ -206,7 +206,7 @@ export function AdminPage() {
             <AdminRow key={v.id}>
               <Thumb url={v.main_image_url} />
               <div className="flex-1 min-w-0">
-                <Link to={`/property/${v.slug}`} className="font-semibold text-ink-900 hover:text-brand-600 truncate block text-base">{v.title}</Link>
+                <Link to={`/listing/${v.slug}`} className="font-semibold text-ink-900 hover:text-brand-600 truncate block text-base">{v.title}</Link>
                 <p className="text-sm text-ink-500 mt-1">{v.city} · {v.user_name} ({v.user_email})</p>
                 <div className="flex flex-wrap items-center gap-3 mt-2">
                   <span className="badge badge-sourced">{v.requested_tier}</span>
@@ -232,7 +232,7 @@ export function AdminPage() {
             <AdminRow key={p.id}>
               <Thumb url={p.main_image_url} />
               <div className="flex-1 min-w-0">
-                <Link to={`/property/${p.slug}`} className="font-semibold text-ink-900 hover:text-brand-600 truncate block text-base">{p.title}</Link>
+                <Link to={`/listing/${p.slug}`} className="font-semibold text-ink-900 hover:text-brand-600 truncate block text-base">{p.title}</Link>
                 <p className="text-sm text-ink-500 mt-1">{p.user_name} ({p.user_email})</p>
                 <div className="flex flex-wrap items-center gap-3 mt-2">
                   <span className="badge badge-sourced">{p.tier}</span>
@@ -284,7 +284,7 @@ export function AdminPage() {
               <AdminRow key={l.id}>
                 <Thumb url={l.main_image_url} />
                 <div className="flex-1 min-w-0">
-                  <Link to={`/property/${l.slug}`} className="font-semibold text-ink-900 hover:text-brand-600 truncate block text-base">{l.title}</Link>
+                  <Link to={`/listing/${l.slug}`} className="font-semibold text-ink-900 hover:text-brand-600 truncate block text-base">{l.title}</Link>
                   <p className="text-sm text-ink-500 mt-1">{l.city}, {l.country} · {l.owner_name} ({l.owner_email})</p>
                   <div className="flex flex-wrap items-center gap-3 mt-2">
                     <span className="text-sm text-ink-700 font-semibold">{l.currency} {Number(l.price_amount ?? 0).toLocaleString()}</span>

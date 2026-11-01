@@ -154,7 +154,7 @@ export function MarketingPage() {
                         )}
                         {p.slug && (
                           <a
-                            href={`/property/${p.slug}`}
+                            href={`/listing/${p.slug}`}
                             className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 text-xs">
                             View listing
                           </a>

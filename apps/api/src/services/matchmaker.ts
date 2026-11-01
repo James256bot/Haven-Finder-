@@ -51,15 +51,15 @@ export async function runMatchmakerEngine() {
             <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin: 15px 0;">
               <img src="${l.main_image_url}" alt="${l.title}" style="width: 100%; height: 200px; object-fit: cover; display: block;" />
               <div style="padding: 15px;">
-                <a href="https://dist-black-six-60.vercel.app/listing/${l.slug}" style="text-decoration: none; color: #0f172a; font-weight: bold; font-size: 16px;">${l.title}</a>
+                <a href="http://localhost:5218/listing/${l.slug}" style="text-decoration: none; color: #0f172a; font-weight: bold; font-size: 16px;">${l.title}</a>
                 <p style="margin: 8px 0 0; color: #64748b; font-size: 14px;">📍 ${l.city} · 🛏 ${l.bedrooms} beds</p>
                 <p style="margin: 8px 0 0; color: #10b981; font-weight: bold; font-size: 18px;">${l.currency} ${Number(l.price_amount).toLocaleString()}</p>
-                <a href="https://dist-black-six-60.vercel.app/listing/${l.slug}" style="display: inline-block; margin-top: 10px; background: #0a5cff; color: white; padding: 8px 16px; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: bold;">View Property</a>
+                <a href="http://localhost:5218/listing/${l.slug}" style="display: inline-block; margin-top: 10px; background: #0a5cff; color: white; padding: 8px 16px; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: bold;">View Property</a>
               </div>
             </div>
           `).join('')}
 
-          <a href="https://dist-black-six-60.vercel.app/search?city=${encodeURIComponent(req.city)}" style="display: inline-block; background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px;">View These Properties</a>
+          <a href="http://localhost:5218/search?city=${encodeURIComponent(req.city)}" style="display: inline-block; background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px;">View These Properties</a>
         </div>
       `;
 

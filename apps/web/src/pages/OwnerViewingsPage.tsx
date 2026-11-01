@@ -101,7 +101,7 @@ export function OwnerViewingsPage() {
           {items.map(v => (
             <div key={v.id} className="rounded-xl border border-slate-200 bg-white p-4">
               <div className="flex gap-4">
-                <Link to={`/property/${v.slug}`} className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100">
+                <Link to={`/listing/${v.slug}`} className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100">
                   <img
                     src={v.main_image_url || 'https://placehold.co/200x200/e2e8f0/64748b?text=No'}
                     alt=""
@@ -111,7 +111,7 @@ export function OwnerViewingsPage() {
                 </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 flex-wrap">
-                    <Link to={`/property/${v.slug}`} className="font-medium text-slate-900 hover:text-brand-600 truncate">
+                    <Link to={`/listing/${v.slug}`} className="font-medium text-slate-900 hover:text-brand-600 truncate">
                       {v.title}
                     </Link>
                     <span className={`text-xs font-medium rounded-full px-2 py-0.5 ${STATUS_STYLES[v.status] ?? STATUS_STYLES.pending}`}>

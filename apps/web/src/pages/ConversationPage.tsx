@@ -89,7 +89,7 @@ export function ConversationPage() {
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-slate-900 truncate">{convo.other_name ?? 'Owner'}</p>
             {convo.listing_slug && (
-              <Link to={`/property/${convo.listing_slug}`} className="text-xs text-brand-600 hover:underline truncate block">
+              <Link to={`/listing/${convo.listing_slug}`} className="text-xs text-brand-600 hover:underline truncate block">
                 {convo.listing_title}
               </Link>
             )}

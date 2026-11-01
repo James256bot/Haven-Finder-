@@ -153,7 +153,7 @@ export function MapView({
                   <PriceDisplay amount={pin.price_amount} currency={pin.currency} period={pin.price_period} />
                 </div>
                 <Link
-                  to={`/property/${pin.slug}`}
+                  to={`/listing/${pin.slug}`}
                   className="block text-center mt-2 px-3 py-2 rounded-lg bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700"
                 >
                   Quick view

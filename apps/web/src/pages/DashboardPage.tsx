@@ -97,14 +97,14 @@ export function DashboardPage() {
           {viewings.map(v => (
             <div key={v.id} className="card p-4">
               <div className="flex gap-4">
-                <Link to={`/property/${v.slug}`} className="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-slate-100">
+                <Link to={`/listing/${v.slug}`} className="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-slate-100">
                   {v.main_image_url
                     ? <img src={v.main_image_url} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                     : <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">—</div>}
                 </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-start justify-between gap-2">
-                    <Link to={`/property/${v.slug}`} className="font-semibold text-slate-900 hover:text-brand-700 truncate">
+                    <Link to={`/listing/${v.slug}`} className="font-semibold text-slate-900 hover:text-brand-700 truncate">
                       {v.title}
                     </Link>
                     <span className={`badge border ${STATUS_STYLE[v.status] ?? STATUS_STYLE.pending}`}>

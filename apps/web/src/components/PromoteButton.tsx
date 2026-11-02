@@ -13,11 +13,13 @@ export function PromoteButton({ listingId }: { listingId: string }) {
   const [selected, setSelected] = useState<string>('boost');
   const [phone, setPhone] = useState('');
   const [busy, setBusy] = useState(false);
-  const [step, setStep] = useState<'form' | 'waiting' | 'success' | 'error'>('form');
+  const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function submit() {
-    setBusy(true); setError(null); setStep('form');
+    if (!phone.trim()) { setError('Phone number is required'); return; }
+    setBusy(true); setError(null); setMessage(null);
+
     try {
       const res = await fetch(`${API}/me/listings/${listingId}/promote/mtn`, {
         method: 'POST',
@@ -28,47 +30,14 @@ export function PromoteButton({ listingId }: { listingId: string }) {
         body: JSON.stringify({ tier: selected, phone }),
       });
       const j = await res.json();
-      if (!j.success) throw new Error(j.error?.message ?? 'Failed');
+      if (!j.success) throw new Error(j.error?.message ?? 'Payment failed');
 
-      // Payment initiated. Now we poll for success.
-      setStep('waiting');
-      pollStatus(j.data.referenceId);
+      setMessage(j.data.message || 'Check your phone for the MTN prompt.');
     } catch (e: any) {
       setError(e.message);
-      setStep('error');
+    } finally {
       setBusy(false);
     }
-  }
-
-  async function pollStatus(refId: string) {
-    const maxAttempts = 20; // 20 * 3s = 60 seconds max
-    for (let i = 0; i < maxAttempts; i++) {
-      await new Promise(r => setTimeout(r, 3000));
-      try {
-        const res = await fetch(`${API}/me/listings/${listingId}/promote/mtn/${refId}/verify`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${localStorage.getItem('hf_token') ?? ''}` },
-        });
-        const j = await res.json();
-        
-        if (j.success && j.data.status === 'SUCCESSFUL') {
-          setStep('success');
-          setTimeout(() => window.location.reload(), 2000);
-          return;
-        }
-        if (j.data?.status === 'FAILED' || !j.success) {
-          throw new Error('Payment failed or was cancelled.');
-        }
-      } catch (e: any) {
-        setError(e.message);
-        setStep('error');
-        setBusy(false);
-        return;
-      }
-    }
-    setError('Payment timed out. Check your phone and try again.');
-    setStep('error');
-    setBusy(false);
   }
 
   if (!open) {
@@ -83,69 +52,37 @@ export function PromoteButton({ listingId }: { listingId: string }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={() => !busy && setOpen(false)}>
       <div className="bg-white rounded-2xl max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">Promote this listing</h3>
-        
-        {step === 'form' && (
-          <>
-            {error && <div className="rounded-lg bg-red-50 text-red-700 text-sm px-3 py-2 mb-3">{error}</div>}
-            <div className="space-y-2 mb-4">
-              {TIERS.map(t => (
-                <label key={t.id} className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer ${selected === t.id ? 'border-brand-500 bg-brand-50' : 'border-slate-200'}`}>
-                  <input type="radio" name="tier" value={t.id} checked={selected === t.id} onChange={() => setSelected(t.id)} className="mt-1" />
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-900">{t.label}</span>
-                      <span className="font-bold text-brand-700">{t.price}</span>
-                    </div>
-                    <p className="text-xs text-slate-500 mt-0.5">{t.desc} · {t.days}</p>
-                  </div>
-                </label>
-              ))}
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-slate-700 mb-1">MTN Mobile Money Number</label>
-              <input
-                type="tel"
-                placeholder="e.g. 0771234567"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-              />
-              <p className="text-xs text-slate-500 mt-1">You will receive a prompt on your phone to enter your PIN.</p>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={() => setOpen(false)} disabled={busy} className="flex-1 px-3 py-2 rounded-lg border border-slate-300 text-sm">Cancel</button>
-              <button onClick={submit} disabled={busy || !phone} className="flex-1 px-3 py-2 rounded-lg bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 disabled:opacity-50">
-                {busy ? 'Connecting…' : 'Pay with MTN'}
-              </button>
-            </div>
-          </>
-        )}
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">Promote your listing</h3>
 
-        {step === 'waiting' && (
-          <div className="text-center py-6">
-            <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <h4 className="font-semibold text-slate-900">Check your phone</h4>
-            <p className="text-sm text-slate-500 mt-2">Enter your MTN PIN to complete the payment. We'll update this page automatically.</p>
-          </div>
-        )}
+        <div className="space-y-2 mb-4">
+          {TIERS.map(t => (
+            <label key={t.id} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer ${selected === t.id ? 'border-brand-600 bg-brand-50' : 'border-slate-200'}`}>
+              <input type="radio" name="tier" value={t.id} checked={selected === t.id} onChange={e => setSelected(e.target.value)} />
+              <div className="flex-1">
+                <p className="font-medium text-slate-900 text-sm">{t.label} — {t.price}</p>
+                <p className="text-xs text-slate-500">{t.desc} · {t.days}</p>
+              </div>
+            </label>
+          ))}
+        </div>
 
-        {step === 'success' && (
-          <div className="text-center py-6">
-            <div className="text-emerald-500 text-4xl mb-2">✓</div>
-            <h4 className="font-semibold text-slate-900">Payment Successful!</h4>
-            <p className="text-sm text-slate-500 mt-2">Your listing is now boosted. Refreshing...</p>
-          </div>
-        )}
+        <label className="block text-sm font-medium text-slate-700 mb-2">MTN Phone Number</label>
+        <input
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+          placeholder="e.g., 256771234567"
+          className="w-full p-3 rounded-xl border border-slate-300 mb-4"
+        />
 
-        {step === 'error' && (
-          <div className="text-center py-6">
-            <div className="text-red-500 text-4xl mb-2">✗</div>
-            <h4 className="font-semibold text-slate-900">Payment Failed</h4>
-            <p className="text-sm text-slate-500 mt-2 mb-4">{error}</p>
-            <button onClick={() => { setStep('form'); setBusy(false); }} className="px-4 py-2 rounded-lg bg-slate-100 font-medium">Try Again</button>
-          </div>
-        )}
+        {error && <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg mb-3">{error}</div>}
+        {message && <div className="p-3 bg-emerald-50 text-emerald-700 text-sm rounded-lg mb-3">{message}</div>}
+
+        <div className="flex gap-3">
+          <button onClick={() => setOpen(false)} disabled={busy} className="flex-1 px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-medium">Cancel</button>
+          <button onClick={submit} disabled={busy} className="flex-1 px-4 py-2 rounded-xl bg-brand-600 text-white font-medium">
+            {busy ? 'Sending...' : 'Pay Now'}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -59,6 +59,8 @@ export function ListPropertyPage() {
           propertyType, 
           listingType, 
           priceAmount: Number(priceAmount) || 1000000,
+          pricePeriod: listingType === 'rent' ? 'monthly' : 'total',
+          currency: 'UGX',
           bedrooms: Number(bedrooms) || 0,
           bathrooms: Number(bathrooms) || 0
         }),
